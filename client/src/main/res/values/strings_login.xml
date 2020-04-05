@@ -1,0 +1,21 @@
+<resources>
+    <string name="firstNameLogin">First Name:</string>
+    <string name="lastNameLogin">Last Name:</string>
+    <string name="emailLogin">Email:</string>
+    <string name="serverHostLogin">Server Host:</string>
+    <string name="serverPortLogin">Server Port:</string>
+    <string name="userNameLogin">User Name:</string>
+    <string name="passwordLogin">Password:</string>
+    <string name="genderLogin">Gender:</string>
+
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+
+    <string name="signInButton">Sign In</string>
+    <string name="registerButton">Register</string>
+
+    <string name="signInFailed">Sign In failed.\n%1$s</string>
+    <string name="registerFailed">Register failed.\n%1$s</string>
+    <string name="signInSucceeded">Sign In succeeded.\nWelcome, %1$s %2$s</string>
+    <string name="registerSucceeded">Register succeeded.\nWelcome, %1$s %2$s</string>
+</resources>

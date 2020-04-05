@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="lifeStoryLines">Life Story Lines</string>
+    <string name="showLifeStoryLines">Show Life Story Lines</string>
+
+    <string name="familyTreeLines">Family Tree Lines</string>
+    <string name="showFamilyTreeLines">Show Family Tree Lines</string>
+
+    <string name="spouseLines">Spouse Lines</string>
+    <string name="showSpouseLines">Show Spouse Lines</string>
+
+    <string name="fatherSide">Father\'s Side</string>
+    <string name="filterByFatherSide">Filter by Father\'s Side of Family</string>
+
+    <string name="motherSide">Mother\'s Side</string>
+    <string name="filterByMotherSide">Filter by Mother\'s Side of Family</string>
+
+    <string name="maleEvents">Male Events</string>
+    <string name="filterBasedOnGender">Filter Events Based on Gender</string>
+
+    <string name="femaleEvents">Female Events</string>
+
+    <string name="logout">Logout</string>
+    <string name="returnToLoginScreen">Return to Login Screen</string>
+
+</resources>

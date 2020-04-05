@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+
+    <ImageView
+        android:id="@+id/item_icon"
+        android:layout_width="56dp"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/itemIcon"
+        android:scaleType="fitCenter"
+        tool:srcCompat="@drawable/ic_map_marker"
+        tool:tint="@color/colorPrimaryDark" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/ItemTextField"
+            android:id="@+id/item_first_text_field"
+            tool:text="John Doe" />
+
+        <TextView
+            style="@style/ItemTextField"
+            android:id="@+id/item_second_text_field"
+            tool:text="Father" />
+
+    </LinearLayout>
+
+</LinearLayout>

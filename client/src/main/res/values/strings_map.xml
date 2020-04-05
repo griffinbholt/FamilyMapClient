@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Map_Menu Strings -->
+    <string name="genderIcon">genderIcon</string>
+    <string name="searchMenu">Search</string>
+    <string name="settingsMenu">Settings</string>
+</resources>

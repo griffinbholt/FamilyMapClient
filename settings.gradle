@@ -1,0 +1,4 @@
+rootProject.name='FamilyMapClient'
+include ':client'
+include ':shared'
+include ':server'

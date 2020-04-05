@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:scrollbars="none"
+    android:layout_weight="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@android:drawable/divider_horizontal_textfield"
+        android:orientation="vertical"
+        android:showDividers="middle|end">
+
+        <RelativeLayout style="@style/SettingSection">
+
+            <LinearLayout
+                style="@style/SettingTextGroup"
+                android:layout_toStartOf="@id/life_story_switch">
+
+                <TextView
+                    style="@style/SettingLabel"
+                    android:text="@string/lifeStoryLines" />
+
+                <TextView
+                    style="@style/SettingCaption"
+                    android:text="@string/showLifeStoryLines" />
+
+            </LinearLayout>
+
+            <Switch
+                style="@style/SettingSwitch"
+                android:id="@+id/life_story_switch" />
+
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingSection">
+
+            <LinearLayout
+                style="@style/SettingTextGroup"
+                android:layout_toStartOf="@id/family_tree_switch">
+
+                <TextView
+                    style="@style/SettingLabel"
+                    android:text="@string/familyTreeLines" />
+
+                <TextView
+                    style="@style/SettingCaption"
+                    android:text="@string/showFamilyTreeLines" />
+
+            </LinearLayout>
+
+            <Switch
+                style="@style/SettingSwitch"
+                android:id="@+id/family_tree_switch" />
+
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingSection">
+
+            <LinearLayout
+                style="@style/SettingTextGroup"
+                android:layout_toStartOf="@id/spouse_switch">
+
+                <TextView
+                    style="@style/SettingLabel"
+                    android:text="@string/spouseLines" />
+
+                <TextView
+                    style="@style/SettingCaption"
+                    android:text="@string/showSpouseLines" />
+
+            </LinearLayout>
+
+            <Switch
+                style="@style/SettingSwitch"
+                android:id="@+id/spouse_switch" />
+
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingSection">
+
+            <LinearLayout
+                style="@style/SettingTextGroup"
+                android:layout_toStartOf="@id/father_side_switch">
+
+                <TextView
+                    style="@style/SettingLabel"
+                    android:text="@string/fatherSide" />
+
+                <TextView
+                    style="@style/SettingCaption"
+                    android:text="@string/filterByFatherSide" />
+
+            </LinearLayout>
+
+            <Switch
+                style="@style/SettingSwitch"
+                android:id="@+id/father_side_switch"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingSection">
+
+            <LinearLayout
+                style="@style/SettingTextGroup"
+                android:layout_toStartOf="@id/mother_side_switch">
+
+                <TextView
+                    style="@style/SettingLabel"
+                    android:text="@string/motherSide" />
+
+                <TextView
+                    style="@style/SettingCaption"
+                    android:text="@string/filterByMotherSide" />
+
+            </LinearLayout>
+
+            <Switch
+                style="@style/SettingSwitch"
+                android:id="@+id/mother_side_switch" />
+
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingSection">
+
+            <LinearLayout
+                style="@style/SettingTextGroup"
+                android:layout_toStartOf="@id/male_event_switch">
+
+                <TextView
+                    style="@style/SettingLabel"
+                    android:text="@string/maleEvents" />
+
+                <TextView
+                    style="@style/SettingCaption"
+                    android:text="@string/filterBasedOnGender" />
+
+            </LinearLayout>
+
+            <Switch
+                style="@style/SettingSwitch"
+                android:id="@+id/male_event_switch" />
+
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingSection">
+
+            <LinearLayout
+                style="@style/SettingTextGroup"
+                android:layout_toStartOf="@id/female_event_switch">
+
+                <TextView
+                    style="@style/SettingLabel"
+                    android:text="@string/femaleEvents" />
+
+                <TextView
+                    style="@style/SettingCaption"
+                    android:text="@string/filterBasedOnGender" />
+
+            </LinearLayout>
+
+            <Switch
+                style="@style/SettingSwitch"
+                android:id="@+id/female_event_switch" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            style="@style/SettingSection"
+            android:id="@+id/logout_button"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:clickable="true">
+
+            <TextView
+                style="@style/SettingLabel"
+                android:text="@string/logout" />
+
+            <TextView
+                style="@style/SettingCaption"
+                android:text="@string/returnToLoginScreen" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

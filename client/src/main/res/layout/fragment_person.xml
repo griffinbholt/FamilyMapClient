@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:scrollbars="none"
+    android:layout_weight="1"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    tool:context=".controller.activity.PersonActivity">
+
+    <LinearLayout
+        android:id="@+id/basic_info_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@android:drawable/divider_horizontal_textfield"
+        android:orientation="vertical"
+        android:showDividers="middle|end">
+
+        <LinearLayout style="@style/DescriptiveField">
+
+            <TextView
+                style="@style/DescriptiveValue"
+                android:id="@+id/first_name_person_field"
+                tool:text="Jane"/>
+
+            <TextView
+                style="@style/DescriptiveFieldLabel"
+                android:text="@string/firstName"/>
+
+        </LinearLayout>
+
+        <LinearLayout style="@style/DescriptiveField">
+
+            <TextView
+                style="@style/DescriptiveValue"
+                android:id="@+id/last_name_person_field"
+                tool:text="Doe"/>
+
+            <TextView
+                style="@style/DescriptiveFieldLabel"
+                android:text="@string/lastName"/>
+
+        </LinearLayout>
+
+        <LinearLayout style="@style/DescriptiveField">
+
+            <TextView
+                style="@style/DescriptiveValue"
+                android:id="@+id/gender_person_field"
+                tool:text="Female"/>
+
+            <TextView
+                style="@style/DescriptiveFieldLabel"
+                android:text="@string/gender"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ExpandableListView
+        android:id="@+id/person_expandable_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/basic_info_layout"
+        android:layout_alignParentBottom="true"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="0.5dp"
+        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft" />
+
+</RelativeLayout>
