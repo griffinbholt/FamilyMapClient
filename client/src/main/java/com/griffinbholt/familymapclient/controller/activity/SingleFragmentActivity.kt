@@ -16,12 +16,12 @@ abstract class SingleFragmentActivity : AppCompatActivity() {
     }
 
     private fun loadFragment() {
-        val fm : FragmentManager = supportFragmentManager;
+        val fm : FragmentManager = supportFragmentManager
         var fragment = fm.findFragmentById(R.id.fragment_container)
 
         if (fragment == null) {
             fragment = createFragment()
-            fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
+            fm.beginTransaction().add(R.id.fragment_container, fragment).commit()
         }
     }
 }

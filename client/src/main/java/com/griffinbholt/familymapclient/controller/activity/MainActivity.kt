@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 
         Iconify.with(FontAwesomeModule())
 
-        val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container);
+        val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
 
         if (fragment == null) {
             loadInitialFragment()

@@ -101,7 +101,7 @@ class ItemListAdapter(private val fragment: Fragment,
     }
 
     private fun setGroupTitle(groupPosition: Int, groupView: View) {
-        val groupTitle: TextView = groupView.findViewById(R.id.group_title)
+        val groupTitle: TextView = groupView.find(R.id.group_title)
         groupTitle.text = getGroup(groupPosition) as String
     }
 
@@ -172,13 +172,13 @@ class ItemListAdapter(private val fragment: Fragment,
 
     private fun initializeItemView(itemView: View, firstTextFieldText: String,
                                    secondTextFieldText: String, icon: IconDrawable) {
-        val firstTextField : TextView = itemView.findViewById(R.id.item_first_text_field)
+        val firstTextField : TextView = itemView.find(R.id.item_first_text_field)
         firstTextField.text = firstTextFieldText
 
-        val secondTextField : TextView = itemView.findViewById(R.id.item_second_text_field)
+        val secondTextField : TextView = itemView.find(R.id.item_second_text_field)
         secondTextField.text = secondTextFieldText
 
-        val iconField : ImageView = itemView.findViewById(R.id.item_icon)
+        val iconField : ImageView = itemView.find(R.id.item_icon)
         iconField.setImageDrawable(icon)
     }
 
