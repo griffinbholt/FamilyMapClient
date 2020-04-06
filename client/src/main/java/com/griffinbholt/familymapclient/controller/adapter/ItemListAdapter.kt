@@ -13,7 +13,7 @@ import com.griffinbholt.familymapclient.R
 import com.griffinbholt.familymapclient.controller.activity.EventActivity
 import com.griffinbholt.familymapclient.controller.activity.PersonActivity
 import com.griffinbholt.familymapclient.controller.utils.IconGenerator
-import com.griffinbholt.familymapclient.model.data.Settings
+import com.griffinbholt.familymapclient.model.Settings
 import com.griffinbholt.familymapclient.model.data.item.ClientEvent
 import com.griffinbholt.familymapclient.model.data.item.ClientPerson
 import com.joanzapata.iconify.IconDrawable

@@ -1,6 +1,7 @@
 package com.griffinbholt.familymapclient.model.data
 
 import com.griffinbholt.familymapclient.controller.utils.IconGenerator
+import com.griffinbholt.familymapclient.model.Settings
 import com.griffinbholt.familymapclient.model.data.item.ClientEvent
 import com.griffinbholt.familymapclient.model.data.item.ClientPerson
 import com.griffinbholt.familymapclient.model.data.utils.Search

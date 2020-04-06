@@ -1,4 +1,4 @@
-package com.griffinbholt.familymapclient.model.data
+package com.griffinbholt.familymapclient.model
 
 object Settings {
     var showLifeStoryLines: Boolean = true

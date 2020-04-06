@@ -18,6 +18,7 @@ object SearchTool : Search {
     override fun searchPeople(): List<ClientPerson> {
         foundPeople.clear()
 
+        checkPerson(DataCache.user!!)
         searchPersonCaches()
 
         return foundPeople.sorted()
@@ -33,9 +34,13 @@ object SearchTool : Search {
 
     private fun searchPersonCache(cache: List<ClientPerson>) {
         for (person in cache) {
-            if (person.fullName().contains(textQuery!!, true)) {
-                foundPeople.add(person)
-            }
+            checkPerson(person)
+        }
+    }
+
+    private fun checkPerson(person: ClientPerson) {
+        if (person.fullName().contains(textQuery!!, true)) {
+            foundPeople.add(person)
         }
     }
 

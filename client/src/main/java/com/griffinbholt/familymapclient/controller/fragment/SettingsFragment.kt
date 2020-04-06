@@ -9,7 +9,7 @@ import android.widget.CompoundButton
 import com.griffinbholt.familymapclient.R
 import com.griffinbholt.familymapclient.model.data.DataCache
 import com.griffinbholt.familymapclient.controller.utils.IconGenerator
-import com.griffinbholt.familymapclient.model.data.Settings
+import com.griffinbholt.familymapclient.model.Settings
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 /**
