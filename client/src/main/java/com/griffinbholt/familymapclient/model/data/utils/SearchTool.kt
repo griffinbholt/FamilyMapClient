@@ -8,8 +8,8 @@ import java.util.*
 object SearchTool : Search {
     private var textQuery: String? = null
 
-    private val foundPeople: MutableSet<ClientPerson> = TreeSet()
-    private val foundEvents: MutableSet<ClientEvent> = TreeSet()
+    private val foundPeople: MutableList<ClientPerson> = ArrayList()
+    private val foundEvents: MutableList<ClientEvent> = ArrayList()
 
     override fun setTextQuery(textQuery: String) {
         SearchTool.textQuery = textQuery
@@ -19,6 +19,7 @@ object SearchTool : Search {
         foundPeople.clear()
 
         checkPerson(DataCache.user!!)
+        DataCache.user!!.spouse?.let { checkPerson(it) }
         searchPersonCaches()
 
         return foundPeople.sorted()

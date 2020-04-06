@@ -1,5 +1,6 @@
 package com.griffinbholt.familymapclient.model.data.item
 
+import androidx.recyclerview.widget.SortedList
 import shared.model.Person
 import shared.model.ServerPerson
 import java.io.Serializable
@@ -13,8 +14,8 @@ class ClientPerson(val mother: ClientPerson?,
                    Comparable<ClientPerson>, Serializable {
 
     var spouse: ClientPerson? = null
-    val children: ArrayList<ClientPerson> = ArrayList()
-    val events: SortedSet<ClientEvent> = TreeSet()
+    val children: MutableList<ClientPerson> = ArrayList()
+    val events: MutableList<ClientEvent> = ArrayList()
 
     fun fullName() = "$firstName $lastName"
 

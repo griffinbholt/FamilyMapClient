@@ -15,6 +15,20 @@ class ClientEvent(val person: ClientPerson? = null,
         eventType.eventName = eventType.eventName.toUpperCase(Locale.ROOT)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ClientEvent) return false
+        return super.equals(other) && (person == other.person)
+    }
+
+    /**
+     * Generates a hashcode for the `ClientEvent` object
+     * @return The hashcode
+     */
+    override fun hashCode(): Int {
+        return Objects.hash(person, latitude, longitude, country, city, eventType, year)
+    }
+
     override fun compareTo(other: ClientEvent): Int {
         return this.year.compareTo(other.year)
     }

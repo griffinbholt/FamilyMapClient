@@ -2,6 +2,7 @@ package shared.model;
 
 import java.io.Serializable;
 import java.time.Year;
+import java.util.Objects;
 
 public class Event implements Serializable {
     /**
@@ -42,6 +43,35 @@ public class Event implements Serializable {
         this.city = city;
         this.eventType = eventType;
         this.year = year;
+    }
+
+    /**
+     * Tests if the input <code>Event</code> object is equal to the current instance
+     * @param o Input <code>Object</code> to be tested for equality with the current <code>Event</code> instance
+     * @return true, if the two events have all of the same information; false, if otherwise
+     */
+    @SuppressWarnings("OverlyComplexBooleanExpression")
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ServerEvent)) return false;
+        ServerEvent event = (ServerEvent) o;
+        return 0 == Double.compare(event.getLatitude(), getLatitude()) &&
+                0 == Double.compare(event.getLongitude(), getLongitude()) &&
+                getCountry().equals(event.getCountry()) &&
+                getCity().equals(event.getCity()) &&
+                getEventType().equals(event.getEventType()) &&
+                getYear().equals(event.getYear());
+    }
+
+    /**
+     * Generates a hashcode for the <code>Event</code> object
+     * @return The hashcode
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(getLatitude(),
+                getLongitude(), getCountry(), getCity(), getEventType(), getYear());
     }
 
     public double getLatitude() {

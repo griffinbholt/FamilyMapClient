@@ -112,26 +112,14 @@ public class ServerEvent extends Event {
                 '}';
     }
 
-    /**
-     * Tests if the input <code>ServerEvent</code> object is equal to the current instance
-     * @param o Input <code>Object</code> to be tested for equality with the current <code>ServerEvent</code> instance
-     * @return true, if the two events have all of the same information; false, if otherwise
-     */
-    @SuppressWarnings("OverlyComplexBooleanExpression")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ServerEvent)) return false;
         ServerEvent event = (ServerEvent) o;
-        return 0 == Double.compare(event.getLatitude(), getLatitude()) &&
-                0 == Double.compare(event.getLongitude(), getLongitude()) &&
-                getAssociatedUsername().equals(event.getAssociatedUsername()) &&
+        return  super.equals(o) && getAssociatedUsername().equals(event.getAssociatedUsername()) &&
                 getEventID().equals(event.getEventID()) &&
-                getPersonID().equals(event.getPersonID()) &&
-                getCountry().equals(event.getCountry()) &&
-                getCity().equals(event.getCity()) &&
-                getEventType().equals(event.getEventType()) &&
-                getYear().equals(event.getYear());
+                getPersonID().equals(event.getPersonID());
     }
 
     /**

@@ -48,6 +48,12 @@ object DataCache : Search {
 
         val userPerson : ServerPerson = findServerPerson(personID)!!
 
+        loadUserParents(userPerson)
+
+        userPerson.spouseID?.let { loadUserSpouse(it) }
+    }
+
+    private fun loadUserParents(userPerson: ServerPerson) {
         val serverMother : ServerPerson? = findServerPerson(userPerson.motherID)
         val serverFather : ServerPerson? = findServerPerson(userPerson.fatherID)
 
@@ -59,6 +65,14 @@ object DataCache : Search {
         user = ClientPerson(clientMother, clientFather, userPerson)
 
         connectChildToParents(clientFather, user!!, clientMother)
+    }
+
+    private fun loadUserSpouse(spouseID: String) {
+        val userSpousePerson : ServerPerson? = findServerPerson(spouseID)
+
+        if (userSpousePerson != null) {
+            user!!.spouse = ClientPerson(null, null, userSpousePerson)
+        }
     }
 
     private fun findServerPerson(personID: String?) : ServerPerson? {
@@ -154,6 +168,10 @@ object DataCache : Search {
         var clientPerson: ClientPerson? = checkUser(personID)
 
         if (clientPerson == null) {
+            clientPerson = checkUserSpouse(personID)
+        }
+
+        if (clientPerson == null) {
             clientPerson = checkEachPersonCache(personID, clientPerson)
         }
 
@@ -177,6 +195,10 @@ object DataCache : Search {
 
     private fun checkUser(personID: String): ClientPerson? {
         return if (DataCache.personID == personID) user else null
+    }
+
+    private fun checkUserSpouse(personID: String): ClientPerson? {
+        return if (user!!.spouse?.personID == personID) user!!.spouse else null
     }
 
     private fun checkPersonCache(personID: String, cache: List<ClientPerson>) : ClientPerson? {
