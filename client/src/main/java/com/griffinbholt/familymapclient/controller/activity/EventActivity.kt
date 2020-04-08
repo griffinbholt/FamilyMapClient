@@ -10,6 +10,8 @@ import com.griffinbholt.familymapclient.model.data.item.ClientEvent
  * A [SingleFragmentActivity] subclass that hosts the [MapFragment]
  * when displaying a specific [ClientEvent] to the user.
  * Use the [EventActivity.newIntent] method to create an [Intent] for this activity.
+ *
+ * @author griffinbholt
  */
 class EventActivity : SingleFragmentActivity() {
 

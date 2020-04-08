@@ -8,6 +8,8 @@ import com.griffinbholt.familymapclient.controller.fragment.SearchFragment
 /**
  * A [SingleFragmentActivity] subclass that hosts the [SearchFragment] to display the search menu to the user
  * Use the [SearchActivity.newIntent] method to create an [Intent] for this activity.
+ *
+ * @author griffinbholt
  */
 class SearchActivity : SingleFragmentActivity() {
 

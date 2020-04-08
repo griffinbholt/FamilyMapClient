@@ -10,12 +10,34 @@ import shared.model.*
 import java.util.*
 import kotlin.collections.ArrayList
 
+/**
+ * A singleton object that stores user data.
+ */
 object DataCache {
+
+	/**
+	 * The personID associated with the user
+	 */
 	var personID: String? = null
+
+	/**
+	 * The [authorization token][AuthToken] received from the FamilyMap server after the user logs in.
+	 */
 	var authToken: AuthToken? = null
+
+	/**
+	 * The [ClientPerson] object representing the user
+	 */
 	var user: ClientPerson? = null
 
+	/**
+	 * @return The user's first name
+	 */
 	fun firstName(): String? = user?.firstName
+
+	/**
+	 * @return The user's last name
+	 */
 	fun lastName(): String? = user?.lastName
 
 	private var motherSideFemales: ArrayList<ClientPerson> = ArrayList()
@@ -36,8 +58,14 @@ object DataCache {
 	private var familyMembersTmpCache: List<ServerPerson>? = null
 	private var familyEventsTmpCache: List<ServerEvent>? = null
 
-	fun loadFamilyMembers(inFamilyMembers: List<ServerPerson>) {
-		familyMembersTmpCache = inFamilyMembers
+	/**
+	 * Processes a list of [ServerPerson] objects, converts them to [ClientPerson] objects,
+	 * and saves them in the [DataCache] for use during the life of the application.
+	 *
+	 * @param familyMembers A list of [ServerPerson] objects to load into the [DataCache]
+	 */
+	fun loadFamilyMembers(familyMembers: List<ServerPerson>) {
+		familyMembersTmpCache = familyMembers
 
 		val userPerson: ServerPerson = findServerPerson(personID)!!
 
@@ -122,10 +150,16 @@ object DataCache {
 		}
 	}
 
-	fun loadFamilyEvents(inFamilyEvents: List<ServerEvent>) {
+	/**
+	 * Processes a list of [ServerEvent] objects, converts them to [ClientEvent] objects,
+	 * and saves them in the [DataCache] for use during the life of the application.
+	 *
+	 * @param familyEvents A list of [ServerEvent] objects to load into the [DataCache]
+	 */
+	fun loadFamilyEvents(familyEvents: List<ServerEvent>) {
 		val possibleEventTypes: MutableSet<EventType> = TreeSet()
 
-		familyEventsTmpCache = inFamilyEvents
+		familyEventsTmpCache = familyEvents
 
 		for (event in familyEventsTmpCache!!) {
 			val person: ClientPerson = findClientPerson(event.personID)!!
@@ -219,18 +253,45 @@ object DataCache {
 		return null
 	}
 
+	/**
+	 * Sets the text query against which [ClientPerson] and [ClientEvent] objects in the [DataCache]
+	 * will be checked using the [SearchTool]
+	 *
+	 * @param textQuery A [String] for which matching [ClientPerson] and [ClientEvent] objects will be sought
+	 */
 	fun setTextQuery(textQuery: String) {
 		SearchTool.setTextQuery(textQuery)
 	}
 
+	/**
+	 * Searches all of the [ClientPerson] objects in the [DataCache] that are enabled by the current filters
+	 * in the [com.griffinbholt.familymapclient.model.Settings] singleton using the [SearchTool].
+	 *
+	 * A [ClientPerson] object matches the input text query if the person's full name contains the string,
+	 * ignoring case.
+	 *
+	 * @return The resulting list of matching [ClientPerson] objects
+	 */
 	fun searchEnabledPeople(): List<ClientPerson> {
 		return SearchTool.searchEnabledPeople()
 	}
 
+	/**
+	 * Searches all of the [ClientEvent] objects in the [DataCache] that are enabled by the current filters
+	 * in the [com.griffinbholt.familymapclient.model.Settings] singleton using the [SearchTool].
+	 *
+	 * A [ClientEvent] object matches the input text query if the event's city, country, event type, and/or year
+	 * contains the string, ignoring case.
+	 *
+	 * @return The resulting list of matching [ClientEvent] objects
+	 */
 	fun searchEnabledEvents(): List<ClientEvent> {
 		return SearchTool.searchEnabledEvents()
 	}
 
+	/**
+	 * Clears all of the data stored in the [DataCache].
+	 */
 	fun clear() {
 		clearUserInfo()
 		clearPeople()
@@ -257,6 +318,9 @@ object DataCache {
 		fatherSideMaleEvents.clear()
 	}
 
+	/**
+	 * @return A [List] of all of the [ClientPerson] objects enabled by the current settings filters.
+	 */
 	fun enabledPersons(): List<ClientPerson> {
 		val enabledPerson: MutableList<ClientPerson> = ArrayList()
 
@@ -273,6 +337,9 @@ object DataCache {
 		return enabledPerson
 	}
 
+	/**
+	 * @return A [List] of all of the [ClientEvent] objects enabled by the current settings filters.
+	 */
 	fun enabledEvents(): List<ClientEvent> {
 		val enabledEvents: MutableList<ClientEvent> = ArrayList()
 

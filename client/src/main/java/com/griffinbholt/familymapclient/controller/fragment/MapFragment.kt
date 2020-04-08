@@ -25,6 +25,8 @@ import kotlinx.android.synthetic.main.fragment_map.*
  * An [UpButtonFragment] subclass to display a [GoogleMap].
  * Implements [OnMapReadyCallback], [GoogleMap.OnMapLoadedCallback], and [GoogleMap.OnMarkerClickListener].
  * Use the [MapFragment.newInstance] factory method to create an instance of this fragment.
+ *
+ * @author griffinbholt
  */
 class MapFragment : UpButtonFragment(),
 		OnMapReadyCallback,

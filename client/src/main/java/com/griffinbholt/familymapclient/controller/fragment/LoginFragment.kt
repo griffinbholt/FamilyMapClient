@@ -24,6 +24,8 @@ import shared.result.RegisterResult
 /**
  * A simple [Fragment] subclass to display the login screen.
  * Use the [LoginFragment.newInstance] factory method to create an instance of this fragment.
+ *
+ * @author griffinbholt
  */
 class LoginFragment : Fragment() {
 
@@ -267,8 +269,8 @@ class LoginFragment : Fragment() {
 	}
 
 	private fun setServerAddress() {
-		ServerProxy.mServerHost = mServerHost
-		ServerProxy.mServerPort = mServerPort
+		ServerProxy.serverHost = mServerHost
+		ServerProxy.serverPort = mServerPort
 	}
 
 	private fun getLoginRequest(): LoginRequest {

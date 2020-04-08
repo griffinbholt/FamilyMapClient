@@ -15,16 +15,29 @@ import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * A singleton object responsible for communicating with the FamilyMap server.
+ *
+ * @author griffinbholt
+ */
 object ServerProxy {
+
 	private const val POST: String = "POST"
 	private const val GET: String = "GET"
 	private const val AUTHORIZATION: String = "Authorization"
 	private const val READ_BUFFER_LENGTH = 1024
 
-	var mServerHost: String? = null
-	var mServerPort: Int? = null
+	/**
+	 * The server host name
+	 */
+	var serverHost: String? = null
 
-	private fun baseUrl(): String? = "http://$mServerHost:$mServerPort"
+	/**
+	 * The server port number
+	 */
+	var serverPort: Int? = null
+
+	private fun baseUrl(): String? = "http://$serverHost:$serverPort"
 
 	private fun loginUrl(): String? = baseUrl() + FamilyMapUrl.LOGIN
 
@@ -34,6 +47,12 @@ object ServerProxy {
 
 	private fun eventUrl(): String? = baseUrl() + FamilyMapUrl.EVENT
 
+	/**
+	 * Sends a [LoginRequest] to the FamilyMap server.
+	 *
+	 * @param request The [LoginRequest] being sent to the FamilyMap server (contains a username and password)
+	 * @return The result of the [LoginRequest] sent back by the server, in the form of a [LoginResult]
+	 */
 	fun login(request: LoginRequest): LoginResult {
 		DataCache.clear()
 
@@ -49,6 +68,12 @@ object ServerProxy {
 		}
 	}
 
+	/**
+	 * Sends a [RegisterRequest] to the FamilyMap server.
+	 *
+	 * @param request The [RegisterRequest] being sent to the FamilyMap server (contains user registry information)
+	 * @return The result of the [RegisterRequest] sent back by the server, in the form of a [RegisterResult]
+	 */
 	fun register(request: RegisterRequest): RegisterResult {
 		DataCache.clear()
 
@@ -124,6 +149,12 @@ object ServerProxy {
 		bufferedWriter.flush()
 	}
 
+	/**
+	 * Requests all family member data of the user with the input [AuthToken] from the FamilyMap server.
+	 *
+	 * @param authToken The authorization token of the user requesting the family member data.
+	 * @return The result of the request sent back by the server, in the form of a [FamilyMembersResult]
+	 */
 	fun requestFamilyMembers(authToken: AuthToken): FamilyMembersResult {
 		val connection: HttpURLConnection = sendGetRequest(personUrl()!!, authToken)
 
@@ -154,6 +185,12 @@ object ServerProxy {
 		throw BadResponseException()
 	}
 
+	/**
+	 * Requests all family event data of the user with the input [AuthToken] from the FamilyMap server.
+	 *
+	 * @param authToken The authorization token of the user requesting the family event data.
+	 * @return The result of the request sent back by the server, in the form of a [AllEventsResult]
+	 */
 	fun requestFamilyEvents(authToken: AuthToken): AllEventsResult {
 		val connection: HttpURLConnection = sendGetRequest(eventUrl()!!, authToken)
 

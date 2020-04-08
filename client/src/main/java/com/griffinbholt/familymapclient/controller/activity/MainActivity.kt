@@ -16,6 +16,8 @@ import com.joanzapata.iconify.fonts.FontAwesomeModule
  * A [AppCompatActivity] subclass that hosts either a [LoginFragment] or a [MapFragment]. It serves as the parent
  * activity for all other activities in the application.
  * Use the [MainActivity.newIntent] method to create an [Intent] for this activity.
+ *
+ * @author griffinbholt
  */
 class MainActivity : AppCompatActivity() {
 

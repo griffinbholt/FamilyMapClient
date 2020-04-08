@@ -8,6 +8,8 @@ import com.griffinbholt.familymapclient.controller.activity.MainActivity
 
 /**
  * An abstract subclass of [Fragment] that manages the functionality of the up button.
+ *
+ * @author griffinbholt
  */
 abstract class UpButtonFragment : Fragment() {
 

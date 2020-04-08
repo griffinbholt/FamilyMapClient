@@ -24,6 +24,8 @@ import shared.model.Gender
 /**
  * The [BaseExpandableListAdapter] subclass for displaying [ClientEvent] and [ClientPerson] objects in an
  * [android.widget.ExpandableListView] for the [com.griffinbholt.familymapclient.controller.fragment.PersonFragment].
+ *
+ * @author griffinbholt
  */
 class ItemListAdapter(
 		private val fragment: Fragment,

@@ -9,6 +9,8 @@ import com.griffinbholt.familymapclient.model.data.item.ClientPerson
 /**
  * A [SingleFragmentActivity] subclass that hosts the [PersonFragment] to display [ClientPerson] data to the user.
  * Use the [PersonActivity.newIntent] method to create an [Intent] for this activity.
+ *
+ * @author griffinbholt
  */
 class PersonActivity : SingleFragmentActivity() {
 

@@ -14,6 +14,8 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 /**
  * An [UpButtonFragment] subclass to display a the settings menu.
  * Use the [SearchFragment.newInstance] factory method to create an instance of this fragment.
+ *
+ * @author griffinbholt
  */
 class SettingsFragment : UpButtonFragment() {
 

@@ -13,10 +13,12 @@ import shared.model.Gender
 /**
  * An [UpButtonFragment] subclass to display a [ClientPerson] information.
  * Use the [PersonFragment.newInstance] factory method to create an instance of this fragment.
+ *
+ * @author griffinbholt
  */
 class PersonFragment : UpButtonFragment() {
 
-	private var focusPerson: ClientPerson? = null
+	private var mFocusPerson: ClientPerson? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -24,7 +26,7 @@ class PersonFragment : UpButtonFragment() {
 	}
 
 	private fun extractFocusPerson() {
-		arguments?.let { focusPerson = it.getSerializable(ARG_FOCUS_PERSON) as ClientPerson }
+		arguments?.let { mFocusPerson = it.getSerializable(ARG_FOCUS_PERSON) as ClientPerson }
 	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -41,28 +43,28 @@ class PersonFragment : UpButtonFragment() {
 	}
 
 	private fun setFirstNameTextField() {
-		first_name_person_field.text = focusPerson!!.firstName
+		first_name_person_field.text = mFocusPerson!!.firstName
 	}
 
 	private fun setLastNameTextField() {
-		last_name_person_field.text = focusPerson!!.lastName
+		last_name_person_field.text = mFocusPerson!!.lastName
 	}
 
 	@Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
 	private fun setGenderTextField() {
-		gender_person_field.text = when (focusPerson!!.gender) {
+		gender_person_field.text = when (mFocusPerson!!.gender) {
 			Gender.FEMALE -> Gender.FEMALE.toFullString()
 			Gender.MALE -> Gender.MALE.toFullString()
 		}
 	}
 
 	private fun setExpandableListView() {
-		person_expandable_list_view.setAdapter(ItemListAdapter(this, focusPerson!!))
+		person_expandable_list_view.setAdapter(ItemListAdapter(this, mFocusPerson!!))
 	}
 
 	override fun onSaveInstanceState(outState: Bundle) {
 		super.onSaveInstanceState(outState)
-		saveInstanceVariables(focusPerson, outState)
+		saveInstanceVariables(mFocusPerson, outState)
 	}
 
 	companion object {

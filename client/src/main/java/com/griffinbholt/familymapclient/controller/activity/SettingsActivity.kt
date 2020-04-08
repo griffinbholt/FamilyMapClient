@@ -8,6 +8,8 @@ import com.griffinbholt.familymapclient.controller.fragment.SettingsFragment
 /**
  * A [SingleFragmentActivity] subclass that hosts the [SettingsFragment] to display the settings to the user
  * Use the [SettingsActivity.newIntent] method to create an [Intent] for this activity.
+ *
+ * @author griffinbholt
  */
 class SettingsActivity : SingleFragmentActivity() {
 

@@ -11,6 +11,8 @@ import shared.model.Gender
 
 /**
  * A singleton object that is responsible for generating icons needed for the application.
+ *
+ * @author griffinbholt
  */
 object IconGenerator {
 

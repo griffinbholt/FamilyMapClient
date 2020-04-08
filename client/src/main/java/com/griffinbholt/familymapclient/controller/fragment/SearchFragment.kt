@@ -24,6 +24,8 @@ import org.jetbrains.anko.find
 /**
  * An [UpButtonFragment] subclass to display a search menu.
  * Use the [SearchFragment.newInstance] factory method to create an instance of this fragment.
+ *
+ * @author griffinbholt
  */
 class SearchFragment : UpButtonFragment() {
 

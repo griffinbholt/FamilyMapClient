@@ -7,6 +7,8 @@ import com.griffinbholt.familymapclient.R
 
 /**
  * An abstract subclass of [AppCompatActivity] that manages the functionality for hosting a single [Fragment].
+ *
+ * @author griffinbholt
  */
 abstract class SingleFragmentActivity : AppCompatActivity() {
 
