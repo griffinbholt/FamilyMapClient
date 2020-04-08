@@ -22,13 +22,13 @@
         android:orientation="vertical">
 
         <TextView
-            style="@style/ItemTextField"
             android:id="@+id/item_first_text_field"
+            style="@style/ItemTextField"
             tool:text="John Doe" />
 
         <TextView
-            style="@style/ItemTextField"
             android:id="@+id/item_second_text_field"
+            style="@style/ItemTextField"
             tool:text="Father" />
 
     </LinearLayout>

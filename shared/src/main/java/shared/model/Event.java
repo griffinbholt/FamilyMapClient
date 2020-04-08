@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.Year;
 import java.util.Objects;
 
-public class Event implements Serializable {
+abstract public class Event implements Serializable {
     /**
      * The latitude at which the event occurred
      */
@@ -36,7 +36,7 @@ public class Event implements Serializable {
     private final Year year;
 
     public Event(double latitude, double longitude, String country, String city, EventType eventType,
-          Year year) {
+                 Year year) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.country = country;
@@ -54,8 +54,8 @@ public class Event implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ServerEvent)) return false;
-        ServerEvent event = (ServerEvent) o;
+        if (!(o instanceof Event)) return false;
+        Event event = (Event) o;
         return 0 == Double.compare(event.getLatitude(), getLatitude()) &&
                 0 == Double.compare(event.getLongitude(), getLongitude()) &&
                 getCountry().equals(event.getCountry()) &&
@@ -70,10 +70,11 @@ public class Event implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(getLatitude(),
-                getLongitude(), getCountry(), getCity(), getEventType(), getYear());
+        return Objects.hash(getLatitude(), getLongitude(), getCountry(), getCity(),
+                getEventType(), getYear());
     }
 
+    // Getters
     public double getLatitude() {
         return this.latitude;
     }

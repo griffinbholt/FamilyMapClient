@@ -4,271 +4,302 @@ import com.griffinbholt.familymapclient.controller.utils.IconGenerator
 import com.griffinbholt.familymapclient.model.Settings
 import com.griffinbholt.familymapclient.model.data.item.ClientEvent
 import com.griffinbholt.familymapclient.model.data.item.ClientPerson
-import com.griffinbholt.familymapclient.model.data.utils.Search
+import com.griffinbholt.familymapclient.model.data.item.SideOfFamily
 import com.griffinbholt.familymapclient.model.data.utils.SearchTool
 import shared.model.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-// TODO - More detailed error checking & logging
-// TODO - Split up functions
+object DataCache {
+	var personID: String? = null
+	var authToken: AuthToken? = null
+	var user: ClientPerson? = null
 
-object DataCache : Search {
-    private enum class SideOfFamily {
-        MOTHER, FATHER
-    }
+	fun firstName(): String? = user?.firstName
+	fun lastName(): String? = user?.lastName
 
-    var personID : String? = null
+	private var motherSideFemales: ArrayList<ClientPerson> = ArrayList()
+	private var motherSideMales: ArrayList<ClientPerson> = ArrayList()
+	private var fatherSideFemales: ArrayList<ClientPerson> = ArrayList()
+	private var fatherSideMales: ArrayList<ClientPerson> = ArrayList()
 
-    var user : ClientPerson? = null
+	private val personCaches: List<List<ClientPerson>> =
+			listOf(motherSideFemales, motherSideMales, fatherSideFemales, fatherSideMales)
 
-    var firstName : String? = null
-        private set
-        get() = user?.firstName
+	private var immediateFamilyMaleEvents: ArrayList<ClientEvent> = ArrayList()
+	private var immediateFamilyFemaleEvents: ArrayList<ClientEvent> = ArrayList()
+	private var motherSideFemaleEvents: ArrayList<ClientEvent> = ArrayList()
+	private var motherSideMaleEvents: ArrayList<ClientEvent> = ArrayList()
+	private var fatherSideFemaleEvents: ArrayList<ClientEvent> = ArrayList()
+	private var fatherSideMaleEvents: ArrayList<ClientEvent> = ArrayList()
 
-    var lastName: String? = null
-        private set
-        get() = user?.lastName
+	private var familyMembersTmpCache: List<ServerPerson>? = null
+	private var familyEventsTmpCache: List<ServerEvent>? = null
 
-    var authToken: AuthToken? = null
+	fun loadFamilyMembers(inFamilyMembers: List<ServerPerson>) {
+		familyMembersTmpCache = inFamilyMembers
 
-    var motherSideFemales: ArrayList<ClientPerson> = ArrayList()
-    var motherSideMales: ArrayList<ClientPerson> = ArrayList()
-    var fatherSideFemales: ArrayList<ClientPerson> = ArrayList()
-    var fatherSideMales: ArrayList<ClientPerson> = ArrayList()
+		val userPerson: ServerPerson = findServerPerson(personID)!!
 
-    var maleEvents: ArrayList<ClientEvent> = ArrayList()
-    var femaleEvents: ArrayList<ClientEvent> = ArrayList()
+		loadUserParents(userPerson)
 
-    private var familyMembersTmpCache: List<ServerPerson>? = null
-    private var familyEventsTmpCache: List<ServerEvent>? = null
+		userPerson.spouseID?.let { loadUserSpouse(it) }
+	}
 
-    fun loadFamilyMembers(inFamilyMembers: List<ServerPerson>) {
-        familyMembersTmpCache = inFamilyMembers
+	private fun loadUserParents(userPerson: ServerPerson) {
+		val serverMother: ServerPerson? = findServerPerson(userPerson.motherID)
+		val serverFather: ServerPerson? = findServerPerson(userPerson.fatherID)
 
-        val userPerson : ServerPerson = findServerPerson(personID)!!
+		val clientMother: ClientPerson? = serverMother?.let { recursivelyLoadFamilyMembers(it, SideOfFamily.MOTHER) }
+		val clientFather: ClientPerson? = serverFather?.let { recursivelyLoadFamilyMembers(it, SideOfFamily.FATHER) }
 
-        loadUserParents(userPerson)
+		connectSpouses(clientMother, clientFather)
 
-        userPerson.spouseID?.let { loadUserSpouse(it) }
-    }
+		user = ClientPerson(SideOfFamily.IMMEDIATE, clientMother, clientFather, userPerson)
 
-    private fun loadUserParents(userPerson: ServerPerson) {
-        val serverMother : ServerPerson? = findServerPerson(userPerson.motherID)
-        val serverFather : ServerPerson? = findServerPerson(userPerson.fatherID)
+		connectChildToParents(clientFather, user!!, clientMother)
+	}
 
-        val clientMother: ClientPerson? = serverMother?.let { recursivelyLoadFamilyMembers(it, SideOfFamily.MOTHER) }
-        val clientFather: ClientPerson? = serverFather?.let { recursivelyLoadFamilyMembers(it, SideOfFamily.FATHER) }
+	private fun loadUserSpouse(spouseID: String) {
+		val userSpousePerson: ServerPerson? = findServerPerson(spouseID)
 
-        connectSpouses(clientMother, clientFather)
+		if (userSpousePerson != null) {
+			user!!.spouse = ClientPerson(SideOfFamily.IMMEDIATE, null, null, userSpousePerson)
+		}
+	}
 
-        user = ClientPerson(clientMother, clientFather, userPerson)
+	private fun findServerPerson(personID: String?): ServerPerson? {
+		return familyMembersTmpCache!!.find { it.personID == personID }
+	}
 
-        connectChildToParents(clientFather, user!!, clientMother)
-    }
+	private fun recursivelyLoadFamilyMembers(person: ServerPerson?, sideOfFamily: SideOfFamily): ClientPerson? {
+		// Base Case #1 - The person does not exist
+		if (person == null) {
+			return null
+		}
 
-    private fun loadUserSpouse(spouseID: String) {
-        val userSpousePerson : ServerPerson? = findServerPerson(spouseID)
+		// Recursive Case - The person does exist
+		val serverMother: ServerPerson? = findServerPerson(person.motherID)
+		val serverFather: ServerPerson? = findServerPerson(person.fatherID)
 
-        if (userSpousePerson != null) {
-            user!!.spouse = ClientPerson(null, null, userSpousePerson)
-        }
-    }
+		val clientMother: ClientPerson? = serverMother?.let { recursivelyLoadFamilyMembers(it, sideOfFamily) }
+		val clientFather: ClientPerson? = serverFather?.let { recursivelyLoadFamilyMembers(it, sideOfFamily) }
 
-    private fun findServerPerson(personID: String?) : ServerPerson? {
-        return familyMembersTmpCache!!.find { it.personID == personID }
-    }
+		connectSpouses(clientMother, clientFather)
 
-    private fun recursivelyLoadFamilyMembers(person: ServerPerson?, sideOfFamily: SideOfFamily) : ClientPerson? {
-        // Base Case #1 - The person does not exist
-        if (person == null) {
-            return null
-        }
+		val clientPerson = ClientPerson(sideOfFamily, clientMother, clientFather, person)
 
-        val serverMother : ServerPerson? = findServerPerson(person.motherID)
-        val serverFather : ServerPerson? = findServerPerson(person.fatherID)
+		connectChildToParents(clientFather, clientPerson, clientMother)
 
-        val clientMother: ClientPerson? = serverMother?.let { recursivelyLoadFamilyMembers(it, sideOfFamily) }
-        val clientFather: ClientPerson? = serverFather?.let { recursivelyLoadFamilyMembers(it, sideOfFamily) }
+		addToCorrectPersonCache(clientPerson, sideOfFamily)
 
-        connectSpouses(clientMother, clientFather)
+		return clientPerson
+	}
 
-        val clientPerson = ClientPerson(clientMother, clientFather, person)
+	private fun connectChildToParents(
+			clientFather: ClientPerson?,
+			clientPerson: ClientPerson,
+			clientMother: ClientPerson?
+	) {
+		clientFather?.addChild(clientPerson)
+		clientMother?.addChild(clientPerson)
+	}
 
-        connectChildToParents(clientFather, clientPerson, clientMother)
+	private fun connectSpouses(clientMother: ClientPerson?, clientFather: ClientPerson?) {
+		clientMother?.spouse = clientFather
+		clientFather?.spouse = clientMother
+	}
 
-        addToCorrectPersonCache(clientPerson, sideOfFamily)
-
-        return clientPerson
-    }
-
-    private fun connectChildToParents(clientFather: ClientPerson?, clientPerson: ClientPerson, clientMother: ClientPerson?) {
-        clientFather?.addChild(clientPerson)
-        clientMother?.addChild(clientPerson)
-    }
-
-    private fun connectSpouses(clientMother: ClientPerson?, clientFather: ClientPerson?) {
-        clientMother?.spouse = clientFather
-        clientFather?.spouse = clientMother
-    }
-
-    private fun addToCorrectPersonCache(clientPerson: ClientPerson, sideOfFamily: SideOfFamily) {
-        if (clientPerson.gender == Gender.FEMALE && sideOfFamily == SideOfFamily.MOTHER) {
-            motherSideFemales.add(clientPerson)
-        } else if (clientPerson.gender == Gender.MALE && sideOfFamily == SideOfFamily.MOTHER) {
-            motherSideMales.add(clientPerson)
-        } else if (clientPerson.gender == Gender.FEMALE) {
-            fatherSideFemales.add(clientPerson)
-        } else {
-            fatherSideMales.add(clientPerson)
-        }
-    }
-
-    @JvmStatic
-    fun loadFamilyEvents(inFamilyEvents: List<ServerEvent>) {
-        val possibleEventTypes : MutableSet<EventType> = TreeSet()
-
-        familyEventsTmpCache = inFamilyEvents
-
-        for (event in familyEventsTmpCache!!) {
-            val person : ClientPerson = findClientPerson(event.personID)!!
-
-            val clientEvent = ClientEvent(person, event)
-
-            person.addEvent(clientEvent)
-
-            addToCorrectEventCache(person, clientEvent)
-
-            possibleEventTypes.add(clientEvent.eventType)
-        }
-
-        recordPossibleEventTypes(possibleEventTypes)
-
-        clearTemporaryCaches()
-    }
-
-    private fun recordPossibleEventTypes(possibleEventTypes: Set<EventType>) {
-        IconGenerator.setPossibleEventTypes(possibleEventTypes.toList())
-    }
-
-    private fun clearTemporaryCaches() {
-        familyMembersTmpCache = null
-        familyEventsTmpCache = null
-    }
-
-    private fun addToCorrectEventCache(person: ClientPerson, clientEvent: ClientEvent) {
-        @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
-        when (person.gender) {
-            Gender.FEMALE -> femaleEvents.add(clientEvent)
-            Gender.MALE -> maleEvents.add(clientEvent)
-        }
-    }
-
-    private fun findClientPerson(personID: String) : ClientPerson? {
-        var clientPerson: ClientPerson? = checkUser(personID)
-
-        if (clientPerson == null) {
-            clientPerson = checkUserSpouse(personID)
-        }
-
-        if (clientPerson == null) {
-            clientPerson = checkEachPersonCache(personID, clientPerson)
-        }
-
-        return clientPerson
-    }
-
-    private fun checkEachPersonCache(personID: String, clientPerson: ClientPerson?) : ClientPerson? {
-        val personCaches: List<List<ClientPerson>> = listOf(motherSideFemales, motherSideMales, fatherSideFemales, fatherSideMales)
-        var foundClientPerson: ClientPerson? = clientPerson
-
-        for (cache in personCaches) {
-            if (foundClientPerson == null) {
-                foundClientPerson = checkPersonCache(personID, cache)
-            } else {
-                return foundClientPerson
-            }
-        }
-
-        return foundClientPerson
-    }
-
-    private fun checkUser(personID: String): ClientPerson? {
-        return if (DataCache.personID == personID) user else null
-    }
-
-    private fun checkUserSpouse(personID: String): ClientPerson? {
-        return if (user!!.spouse?.personID == personID) user!!.spouse else null
-    }
-
-    private fun checkPersonCache(personID: String, cache: List<ClientPerson>) : ClientPerson? {
-        for (person in cache) {
-            if (person.personID == personID) {
-                return person
-            }
-        }
-
-        return null
-    }
-
-    override fun setTextQuery(textQuery: String) {
-        SearchTool.setTextQuery(textQuery)
-    }
-
-    override fun searchPeople(): List<ClientPerson> {
-        return SearchTool.searchPeople()
-    }
-
-    override fun searchEvents(): List<ClientEvent> {
-        return SearchTool.searchEvents()
-    }
-
-    fun clear() {
-        personID = null
-
-        user = null
-
-        firstName = null
-        lastName = null
-
-        authToken = null
-
-        motherSideFemales.clear()
-        motherSideMales.clear()
-        fatherSideFemales.clear()
-        fatherSideMales.clear()
-
-        maleEvents.clear()
-        femaleEvents.clear()
-    }
-
-    fun enabledPersonCaches() : List<List<ClientPerson>> {
-        val enabledPersonCaches : MutableList<List<ClientPerson>> = ArrayList()
-
-        if (Settings.motherSideFilter) {
-            enabledPersonCaches.add(motherSideFemales)
-            enabledPersonCaches.add(motherSideMales)
-        }
-
-        if (Settings.fatherSideFilter) {
-            enabledPersonCaches.add(fatherSideFemales)
-            enabledPersonCaches.add(fatherSideMales)
-        }
-
-        return enabledPersonCaches
-    }
-
-    fun enabledEventsCaches() : List<List<ClientEvent>> {
-        val enabledEventsCaches : MutableList<List<ClientEvent>> = ArrayList()
-
-        if (Settings.femaleEventFilter) {
-            enabledEventsCaches.add(femaleEvents)
-        }
-
-        if (Settings.maleEventFilter) {
-            enabledEventsCaches.add(maleEvents)
-        }
-
-        return enabledEventsCaches
-    }
+	private fun addToCorrectPersonCache(clientPerson: ClientPerson, sideOfFamily: SideOfFamily) {
+		if (clientPerson.gender == Gender.FEMALE && sideOfFamily == SideOfFamily.MOTHER) {
+			motherSideFemales.add(clientPerson)
+		} else if (clientPerson.gender == Gender.MALE && sideOfFamily == SideOfFamily.MOTHER) {
+			motherSideMales.add(clientPerson)
+		} else if (clientPerson.gender == Gender.FEMALE) {
+			fatherSideFemales.add(clientPerson)
+		} else {
+			fatherSideMales.add(clientPerson)
+		}
+	}
+
+	fun loadFamilyEvents(inFamilyEvents: List<ServerEvent>) {
+		val possibleEventTypes: MutableSet<EventType> = TreeSet()
+
+		familyEventsTmpCache = inFamilyEvents
+
+		for (event in familyEventsTmpCache!!) {
+			val person: ClientPerson = findClientPerson(event.personID)!!
+
+			val clientEvent = ClientEvent(person, event)
+
+			person.addEvent(clientEvent)
+
+			addToCorrectEventCache(person, clientEvent)
+
+			possibleEventTypes.add(clientEvent.eventType)
+		}
+
+		recordPossibleEventTypes(possibleEventTypes)
+
+		clearTemporaryCaches()
+	}
+
+	private fun recordPossibleEventTypes(possibleEventTypes: Set<EventType>) {
+		IconGenerator.setPossibleEventTypes(possibleEventTypes.toList())
+	}
+
+	private fun clearTemporaryCaches() {
+		familyMembersTmpCache = null
+		familyEventsTmpCache = null
+	}
+
+	@Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
+	private fun addToCorrectEventCache(person: ClientPerson, clientEvent: ClientEvent) {
+		val gender: Gender = person.gender
+		val sideOfFamily: SideOfFamily = person.sideOfFamily
+
+		if (sideOfFamily == SideOfFamily.MOTHER && gender == Gender.FEMALE) {
+			motherSideFemaleEvents.add(clientEvent)
+		} else if (sideOfFamily == SideOfFamily.MOTHER && gender == Gender.MALE) {
+			motherSideMaleEvents.add(clientEvent)
+		} else if (sideOfFamily == SideOfFamily.FATHER && gender == Gender.FEMALE) {
+			fatherSideFemaleEvents.add(clientEvent)
+		} else if (sideOfFamily == SideOfFamily.FATHER && gender == Gender.MALE) {
+			fatherSideMaleEvents.add(clientEvent)
+		} else if (gender == Gender.FEMALE) {
+			immediateFamilyFemaleEvents.add(clientEvent)
+		} else {
+			immediateFamilyMaleEvents.add(clientEvent)
+		}
+	}
+
+	private fun findClientPerson(personID: String): ClientPerson? {
+		var clientPerson: ClientPerson? = checkUser(personID)
+
+		if (clientPerson == null) {
+			clientPerson = checkUserSpouse(personID)
+		}
+
+		if (clientPerson == null) {
+			clientPerson = checkPersonCaches(personID, clientPerson)
+		}
+
+		return clientPerson
+	}
+
+	private fun checkPersonCaches(personID: String, clientPerson: ClientPerson?): ClientPerson? {
+		var foundClientPerson: ClientPerson? = clientPerson
+
+		for (cache in personCaches) {
+			if (foundClientPerson == null) {
+				foundClientPerson = checkPersonCache(personID, cache)
+			} else {
+				return foundClientPerson
+			}
+		}
+
+		return foundClientPerson
+	}
+
+	private fun checkUser(personID: String): ClientPerson? {
+		return if (DataCache.personID == personID) user else null
+	}
+
+	private fun checkUserSpouse(personID: String): ClientPerson? {
+		return if (user!!.spouse?.personID == personID) user!!.spouse else null
+	}
+
+	private fun checkPersonCache(personID: String, cache: List<ClientPerson>): ClientPerson? {
+		for (person in cache) {
+			if (person.personID == personID) {
+				return person
+			}
+		}
+
+		return null
+	}
+
+	fun setTextQuery(textQuery: String) {
+		SearchTool.setTextQuery(textQuery)
+	}
+
+	fun searchEnabledPeople(): List<ClientPerson> {
+		return SearchTool.searchEnabledPeople()
+	}
+
+	fun searchEnabledEvents(): List<ClientEvent> {
+		return SearchTool.searchEnabledEvents()
+	}
+
+	fun clear() {
+		clearUserInfo()
+		clearPeople()
+		clearEvents()
+	}
+
+	private fun clearUserInfo() {
+		personID = null
+		user = null
+		authToken = null
+	}
+
+	private fun clearPeople() {
+		motherSideFemales.clear()
+		motherSideMales.clear()
+		fatherSideFemales.clear()
+		fatherSideMales.clear()
+	}
+
+	private fun clearEvents() {
+		motherSideFemaleEvents.clear()
+		motherSideMaleEvents.clear()
+		fatherSideFemaleEvents.clear()
+		fatherSideMaleEvents.clear()
+	}
+
+	fun enabledPersons(): List<ClientPerson> {
+		val enabledPerson: MutableList<ClientPerson> = ArrayList()
+
+		if (Settings.motherSideFilter) {
+			enabledPerson.addAll(motherSideFemales)
+			enabledPerson.addAll(motherSideMales)
+		}
+
+		if (Settings.fatherSideFilter) {
+			enabledPerson.addAll(fatherSideFemales)
+			enabledPerson.addAll(fatherSideMales)
+		}
+
+		return enabledPerson
+	}
+
+	fun enabledEvents(): List<ClientEvent> {
+		val enabledEvents: MutableList<ClientEvent> = ArrayList()
+
+		if (Settings.femaleEventFilter) {
+			enabledEvents.addAll(immediateFamilyFemaleEvents)
+
+			if (Settings.motherSideFilter) {
+				enabledEvents.addAll(motherSideFemaleEvents)
+			}
+
+			if (Settings.fatherSideFilter) {
+				enabledEvents.addAll(fatherSideFemaleEvents)
+			}
+		}
+
+		if (Settings.maleEventFilter) {
+			enabledEvents.addAll(immediateFamilyMaleEvents)
+
+			if (Settings.motherSideFilter) {
+				enabledEvents.addAll(motherSideMaleEvents)
+			}
+
+			if (Settings.fatherSideFilter) {
+				enabledEvents.addAll(fatherSideMaleEvents)
+			}
+		}
+
+		return enabledEvents
+	}
 }

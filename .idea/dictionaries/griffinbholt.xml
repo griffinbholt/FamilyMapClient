@@ -1,9 +1,11 @@
 <component name="ProjectDictionaryState">
   <dictionary name="griffinbholt">
     <words>
+      <w>autofill</w>
       <w>familymapclient</w>
       <w>familymapserver</w>
       <w>griffinbholt</w>
+      <w>gson</w>
       <w>httpserver</w>
       <w>jdbc</w>
       <w>sqlite</w>

@@ -1,15 +1,23 @@
 package server;
 
 import com.sun.net.httpserver.HttpServer;
-import server.dao.DatabaseChecker;
-import server.exception.DataAccessException;
-import server.handler.*;
-import shared.http.FamilyMapUrl;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import server.dao.DatabaseChecker;
+import server.exception.DataAccessException;
+import server.handler.ClearRequestHandler;
+import server.handler.EventRequestHandler;
+import server.handler.FileRequestHandler;
+import server.handler.FillRequestHandler;
+import server.handler.LoadRequestHandler;
+import server.handler.LoginRequestHandler;
+import server.handler.PersonRequestHandler;
+import server.handler.RegisterRequestHandler;
+import shared.http.FamilyMapUrl;
 
 /**
  * The Main Family Map Server Singleton
@@ -22,6 +30,9 @@ public final class Server {
     private static final String USAGE = "USAGE: java familymapserver.server portNumber";
 
     private final Logger logger = Logger.getLogger("Server");
+
+    private Server() {
+    }
 
     /**
      * Starts up the server, which runs perpetually or until a fatal error occurs

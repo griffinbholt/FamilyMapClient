@@ -38,12 +38,12 @@ public class User {
     private final Gender gender;
 
     /**
-     * The unique person ID of the user's {@link server.model.Person Person} object in the database
+     * The unique person ID of the user's {@link shared.model.ServerPerson Person} object in the database
      */
     private final String personID;
 
     /**
-     * A reference to the user's {@link server.model.Person Person} object
+     * A reference to the user's {@link shared.model.ServerPerson Person}  object
      */
     private final ServerPerson personObj;
 
@@ -55,8 +55,8 @@ public class User {
      * @param firstName Input first name of the user
      * @param lastName Input last name of the user
      * @param genderAbbrev Input genderAbbrev of the user ("m" for MALE; "f" for FEMALE)
-     * @param personID Input ID of the user's {@link server.model.Person Person} object
-     * @param personObj A reference to the user's {@link server.model.Person Person} object
+     * @param personID Input ID of the user's {@link shared.model.ServerPerson Person}  object
+     * @param personObj A reference to the user's {@link shared.model.ServerPerson Person}  object
      */
     public User(String userName, String password, String email, String firstName, String lastName,
                 String genderAbbrev, String personID, ServerPerson personObj) {
@@ -65,13 +65,13 @@ public class User {
 
     /**
      * Creates a new <code>User</code> object with the instance variable values input through the parameters.
-     * The personID and {@link server.model.Person Person} object will be generated for the user.
+     * The personID and {@link shared.model.ServerPerson Person} object will be generated for the user.
      * @param userName Input username of the user
      * @param password Input password of the user
      * @param email Input email address of the user
      * @param firstName Input first name of the user
      * @param lastName Input last name of the user
-     * @param gender Input gender of the user, in the form of a {@link server.model.Gender Gender} enum
+     * @param gender Input gender of the user, in the form of a {@link shared.model.Gender Gender} enum
      */
     public User(String userName, String password, String email, String firstName, String lastName, Gender gender)
     {
@@ -168,7 +168,7 @@ public class User {
 
     /**
      * Gets the gender of the user (represented as an enumeration)
-     * @return A {@link server.model.Gender Gender} enumeration
+     * @return A {@link shared.model.Gender Gender} enumeration
      */
     public Gender getGender() {
         return gender;

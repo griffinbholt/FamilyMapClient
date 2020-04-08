@@ -11,81 +11,87 @@ import com.griffinbholt.familymapclient.model.data.item.ClientPerson
 import kotlinx.android.synthetic.main.fragment_person.*
 import shared.model.Gender
 
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_FOCUS_PERSON = "com.griffinbholt.person.focusPerson"
-
 /**
  * A simple [Fragment] subclass.
  * Use the [PersonFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class PersonFragment : Fragment() {
-    private var focusPerson: ClientPerson? = null
+class PersonFragment : UpButtonFragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            focusPerson = it.getSerializable(ARG_FOCUS_PERSON) as ClientPerson
-        }
-    }
+	private var focusPerson: ClientPerson? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_person, container, false)
-    }
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		extractFocusPerson()
+	}
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+	private fun extractFocusPerson() {
+		arguments?.let { focusPerson = it.getSerializable(ARG_FOCUS_PERSON) as ClientPerson }
+	}
 
-        setFirstNameTextField()
-        setLastNameTextField()
-        setGenderTextField()
-        setExpandableListView()
-    }
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+		return inflater.inflate(R.layout.fragment_person, container, false)
+	}
 
-    private fun setFirstNameTextField() {
-        first_name_person_field.text = focusPerson!!.firstName
-    }
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
 
-    private fun setLastNameTextField() {
-        last_name_person_field.text = focusPerson!!.lastName
-    }
+		setFirstNameTextField()
+		setLastNameTextField()
+		setGenderTextField()
+		setExpandableListView()
+	}
 
-    @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
-    private fun setGenderTextField() {
-        gender_person_field.text = when (focusPerson!!.gender) {
-            Gender.FEMALE -> Gender.FEMALE.toFullString()
-            Gender.MALE -> Gender.MALE.toFullString()
-        }
-    }
+	private fun setFirstNameTextField() {
+		first_name_person_field.text = focusPerson!!.firstName
+	}
 
-    private fun setExpandableListView() {
-        person_expandable_list_view.setAdapter(ItemListAdapter(this, focusPerson!!))
-    }
+	private fun setLastNameTextField() {
+		last_name_person_field.text = focusPerson!!.lastName
+	}
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putSerializable(ARG_FOCUS_PERSON, focusPerson)
-    }
+	@Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
+	private fun setGenderTextField() {
+		gender_person_field.text = when (focusPerson!!.gender) {
+			Gender.FEMALE -> Gender.FEMALE.toFullString()
+			Gender.MALE -> Gender.MALE.toFullString()
+		}
+	}
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param focusPerson The person object, the information of which will be displayed
-         * @return A new instance of fragment PersonFragment.
-         */
-        @JvmStatic
-        fun newInstance(focusPerson: ClientPerson) : PersonFragment {
-            val arguments = Bundle()
+	private fun setExpandableListView() {
+		person_expandable_list_view.setAdapter(ItemListAdapter(this, focusPerson!!))
+	}
 
-            arguments.putSerializable(ARG_FOCUS_PERSON, focusPerson)
+	override fun onSaveInstanceState(outState: Bundle) {
+		super.onSaveInstanceState(outState)
+		saveInstanceVariables(focusPerson, outState)
+	}
 
-            val personFragment = PersonFragment()
-            personFragment.arguments = arguments
+	companion object {
+		// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+		private const val ARG_FOCUS_PERSON = "com.griffinbholt.person.focusPerson"
 
-            return personFragment
-        }
-    }
+		/**
+		 * Use this factory method to create a new instance of
+		 * this fragment using the provided parameters.
+		 *
+		 * @param focusPerson The person object, the information of which will be displayed
+		 * @return A new instance of fragment PersonFragment.
+		 */
+		@JvmStatic
+		fun newInstance(focusPerson: ClientPerson): PersonFragment {
+			val arguments = Bundle()
+
+			saveInstanceVariables(focusPerson, arguments)
+
+			val personFragment = PersonFragment()
+			personFragment.arguments = arguments
+
+			return personFragment
+		}
+
+		private fun saveInstanceVariables(focusPerson: ClientPerson?, bundle: Bundle) {
+			bundle.putSerializable(ARG_FOCUS_PERSON, focusPerson)
+		}
+	}
 }

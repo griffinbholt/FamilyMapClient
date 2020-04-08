@@ -5,67 +5,60 @@ import com.griffinbholt.familymapclient.model.data.item.ClientEvent
 import com.griffinbholt.familymapclient.model.data.item.ClientPerson
 import java.util.*
 
-object SearchTool : Search {
-    private var textQuery: String? = null
+object SearchTool {
+	private var textQuery: String? = null
 
-    private val foundPeople: MutableList<ClientPerson> = ArrayList()
-    private val foundEvents: MutableList<ClientEvent> = ArrayList()
+	private val foundPeople: MutableList<ClientPerson> = ArrayList()
+	private val foundEvents: MutableList<ClientEvent> = ArrayList()
 
-    override fun setTextQuery(textQuery: String) {
-        SearchTool.textQuery = textQuery
-    }
+	fun setTextQuery(textQuery: String) {
+		SearchTool.textQuery = textQuery
+	}
 
-    override fun searchPeople(): List<ClientPerson> {
-        foundPeople.clear()
+	fun searchEnabledPeople(): List<ClientPerson> {
+		foundPeople.clear()
 
-        checkPerson(DataCache.user!!)
-        DataCache.user!!.spouse?.let { checkPerson(it) }
-        searchPersonCaches()
+		checkImmediateFamily()
 
-        return foundPeople.sorted()
-    }
+		checkPersons(DataCache.enabledPersons())
 
-    private fun searchPersonCaches() {
-        val personCaches : List<List<ClientPerson>> = DataCache.enabledPersonCaches()
+		return foundPeople.sorted()
+	}
 
-        for (cache in personCaches) {
-            searchPersonCache(cache)
-        }
-    }
+	private fun checkImmediateFamily() {
+		checkPerson(DataCache.user!!)
+		DataCache.user!!.spouse?.let { checkPerson(it) }
+	}
 
-    private fun searchPersonCache(cache: List<ClientPerson>) {
-        for (person in cache) {
-            checkPerson(person)
-        }
-    }
+	private fun checkPersons(persons: List<ClientPerson>) {
+		for (person in persons) {
+			checkPerson(person)
+		}
+	}
 
-    private fun checkPerson(person: ClientPerson) {
-        if (person.fullName().contains(textQuery!!, true)) {
-            foundPeople.add(person)
-        }
-    }
+	private fun checkPerson(person: ClientPerson) {
+		if (person.fullName().contains(textQuery!!, true)) {
+			foundPeople.add(person)
+		}
+	}
 
-    override fun searchEvents(): List<ClientEvent> {
-        foundEvents.clear()
+	fun searchEnabledEvents(): List<ClientEvent> {
+		foundEvents.clear()
 
-        searchEventCaches()
+		checkEvents(DataCache.enabledEvents())
 
-        return foundEvents.sorted()
-    }
+		return foundEvents.sorted()
+	}
 
-    private fun searchEventCaches() {
-        val eventCaches: List<List<ClientEvent>> = DataCache.enabledEventsCaches()
+	private fun checkEvents(events: List<ClientEvent>) {
+		for (event in events) {
+			checkEvent(event)
+		}
+	}
 
-        for (cache in eventCaches) {
-            searchEventCache(cache)
-        }
-    }
-
-    private fun searchEventCache(cache: List<ClientEvent>) {
-        for (event in cache) {
-            if (event.description().contains(textQuery!!, true)) {
-                foundEvents.add(event)
-            }
-        }
-    }
+	private fun checkEvent(event: ClientEvent) {
+		if (event.description().contains(textQuery!!, true)) {
+			foundEvents.add(event)
+		}
+	}
 }

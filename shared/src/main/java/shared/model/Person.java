@@ -1,8 +1,9 @@
 package shared.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
-public class Person implements Serializable {
+public abstract class Person implements Serializable {
     /**
      * A unique person ID
      */
@@ -38,6 +39,34 @@ public class Person implements Serializable {
         this.gender = gender;
     }
 
+    /**
+     * Tests if the input <code>Person</code> object is equal to the current instance
+     *
+     * @param o Input <code>Object</code> to be tested for equality with the current <code>Person</code> instance
+     * @return true, if the two persons have all of the same information; false, if otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person)) return false;
+        Person person = (Person) o;
+        return getPersonID().equals(person.getPersonID()) &&
+                getFirstName().equals(person.getFirstName()) &&
+                getLastName().equals(person.getLastName()) &&
+                getGender() == person.getGender();
+    }
+
+    /**
+     * Generates the hashcode of the <code>Person</code> object
+     *
+     * @return The hashcode
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPersonID(), getFirstName(), getLastName(), getGender());
+    }
+
+    // Getters
     public String getPersonID() {
         return this.personID;
     }

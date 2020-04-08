@@ -2,8 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:scrollbars="none"
-    android:layout_weight="1">
+    android:layout_weight="1"
+    android:scrollbars="none">
 
     <TableLayout
         android:layout_width="match_parent"
@@ -13,141 +13,140 @@
         android:stretchColumns="3">
 
         <TableRow>
+
             <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:gravity="end"
-                android:text="@string/serverHostLogin"/>
+                style="@style/LoginFieldLabel"
+                android:labelFor="@id/server_host_field"
+                android:text="@string/serverHostLogin" />
+
             <EditText
                 android:id="@+id/server_host_field"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_span="3"
+                style="@style/LoginTextField"
                 android:inputType="text" />
         </TableRow>
 
         <TableRow>
+
             <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:gravity="end"
-                android:text="@string/serverPortLogin"/>
+                style="@style/LoginFieldLabel"
+                android:labelFor="@id/server_port_field"
+                android:text="@string/serverPortLogin" />
+
             <EditText
                 android:id="@+id/server_port_field"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_span="3"
+                style="@style/LoginTextField"
                 android:inputType="number" />
         </TableRow>
 
         <TableRow>
+
             <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:gravity="end"
-                android:text="@string/userNameLogin"/>
+                style="@style/LoginFieldLabel"
+                android:labelFor="@id/user_name_field"
+                android:text="@string/userNameLogin" />
+
             <EditText
                 android:id="@+id/user_name_field"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_span="3"
+                style="@style/LoginTextField"
                 android:inputType="textPersonName" />
         </TableRow>
 
         <TableRow>
+
             <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:gravity="end"
-                android:text="@string/passwordLogin"/>
+                style="@style/LoginFieldLabel"
+                android:labelFor="@id/password_field"
+                android:text="@string/passwordLogin" />
+
             <EditText
                 android:id="@+id/password_field"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_span="3"
+                style="@style/LoginTextField"
                 android:inputType="textPassword" />
         </TableRow>
 
         <TableRow>
+
             <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:gravity="end"
-                android:text="@string/firstNameLogin"/>
+                style="@style/LoginFieldLabel"
+                android:labelFor="@id/first_name_login_field"
+                android:text="@string/firstNameLogin" />
+
             <EditText
                 android:id="@+id/first_name_login_field"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_span="3"
+                style="@style/LoginTextField"
                 android:inputType="textPersonName" />
         </TableRow>
 
         <TableRow>
+
             <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:gravity="end"
-                android:text="@string/lastNameLogin"/>
+                style="@style/LoginFieldLabel"
+                android:labelFor="@id/last_name_login_field"
+                android:text="@string/lastNameLogin" />
+
             <EditText
                 android:id="@+id/last_name_login_field"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_span="3"
+                style="@style/LoginTextField"
                 android:inputType="textPersonName" />
         </TableRow>
 
         <TableRow>
+
             <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:gravity="end"
-                android:text="@string/emailLogin"/>
+                style="@style/LoginFieldLabel"
+                android:labelFor="@id/email_field"
+                android:text="@string/emailLogin" />
+
             <EditText
                 android:id="@+id/email_field"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_span="3"
+                style="@style/LoginTextField"
                 android:inputType="textEmailAddress" />
         </TableRow>
 
         <TableRow>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:gravity="end|center_vertical"
                 android:text="@string/genderLogin" />
-            <RadioGroup android:id="@+id/gender_radio_group"
+
+            <RadioGroup
+                android:id="@+id/gender_radio_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <RadioButton android:id="@+id/male_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/male"/>
-                <RadioButton android:id="@+id/female_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/female"/>
+
+                <RadioButton
+                    android:id="@+id/male_radio_button"
+                    style="@style/LoginButton"
+                    android:text="@string/male" />
+
+                <RadioButton
+                    android:id="@+id/female_radio_button"
+                    style="@style/LoginButton"
+                    android:text="@string/female" />
             </RadioGroup>
         </TableRow>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center_horizontal"
             android:orientation="horizontal"
-            android:paddingTop="48dp"
-            android:gravity="center_horizontal">
+            android:paddingTop="48dp">
+
             <Button
                 android:id="@+id/sign_in_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/LoginButton"
                 android:text="@string/signInButton" />
 
             <Button
                 android:id="@+id/register_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/LoginButton"
                 android:text="@string/registerButton" />
         </LinearLayout>
+
     </TableLayout>
+
 </ScrollView>

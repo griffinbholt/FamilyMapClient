@@ -1,17 +1,18 @@
 package server.service.helper;
 
-import com.google.gson.Gson;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 import server.service.helper.jsonobjects.Location;
 import server.service.helper.jsonobjects.LocationCatalog;
 import server.service.helper.jsonobjects.NameCatalog;
+import shared.json.JsonInterpreter;
 import shared.model.ServerEvent;
 import shared.model.ServerPerson;
 import shared.model.User;
-
-import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
 
 /**
  * A helper object that handles all of the logic for generating family and event data for a user
@@ -83,23 +84,7 @@ public class FamilyDataGenerator {
 
     private Object parseJson(String fileName, Class<?> jsonObjClass) {
         Path LOCATIONS_FILEPATH = Paths.get(SAMPLE_DATA_DIR, fileName);
-        return parseJson(LOCATIONS_FILEPATH, jsonObjClass);
-    }
-
-    @SuppressWarnings("OverlyBroadCatchBlock")
-    private static Object parseJson(Path filePath, Class<?> jsonClass) {
-        File locationFile = filePath.toFile();
-
-        try (FileReader fileReader = new FileReader(locationFile)) {
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-            Gson gson = new Gson();
-            return gson.fromJson(bufferedReader, jsonClass);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return JsonInterpreter.parseJson(LOCATIONS_FILEPATH, jsonObjClass);
     }
 
     /**

@@ -117,7 +117,8 @@ public class ServerEvent extends Event {
         if (this == o) return true;
         if (!(o instanceof ServerEvent)) return false;
         ServerEvent event = (ServerEvent) o;
-        return  super.equals(o) && getAssociatedUsername().equals(event.getAssociatedUsername()) &&
+        return super.equals(o) &&
+                getAssociatedUsername().equals(event.getAssociatedUsername()) &&
                 getEventID().equals(event.getEventID()) &&
                 getPersonID().equals(event.getPersonID());
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -10,7 +10,7 @@
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/map_info_display"/>
+        android:layout_above="@id/map_info_display" />
 
     <RelativeLayout
         android:id="@+id/map_info_display"
@@ -21,15 +21,21 @@
 
         <ImageView
             android:id="@+id/map_display_icon"
-            android:layout_gravity="center|start"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
-            android:layout_width="96dp"
-            android:contentDescription="@string/genderIcon"/>
-        
+            android:layout_gravity="center|start"
+            android:contentDescription="@string/genderIcon"
+            android:padding="8dp" />
+
         <TextView
             android:id="@+id/map_display_text"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@id/map_display_icon"
+            android:gravity="center"
+            android:paddingEnd="8dp"
+            android:textSize="16sp"
+            tools:ignore="RtlSymmetry" />
     </RelativeLayout>
 
 </RelativeLayout>

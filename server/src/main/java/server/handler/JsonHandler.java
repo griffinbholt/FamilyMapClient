@@ -1,17 +1,21 @@
 package server.handler;
 
 import com.sun.net.httpserver.HttpExchange;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+
 import server.exception.HttpBadRequestException;
 import server.exception.InvalidUriPathException;
 import shared.json.JsonInterpreter;
 import shared.result.Result;
 
-import java.io.*;
-
 abstract class JsonHandler extends Handler {
     private static final int READ_BUFFER_LENGTH = 1024;
-
-    private JsonInterpreter jsonInterpreter = new JsonInterpreter();
 
     String[] getRequestURIPathComponents(HttpExchange exchange) {
         String uriPath = getRequestURIPath(exchange);
@@ -32,14 +36,14 @@ abstract class JsonHandler extends Handler {
     }
 
     private void writeResultToResponseBody(Result result, OutputStream respBody) throws IOException {
-        String resultJsonString = jsonInterpreter.generateJsonString(result);
+        String resultJsonString = JsonInterpreter.generateJsonString(result);
         writeStringToOutputStream(resultJsonString, respBody);
     }
 
     Object getRequest(HttpExchange exchange, Class<?> jsonClass) throws IOException {
         InputStream requestBody = exchange.getRequestBody();
         String jsonString = readStringFromInputStream(requestBody);
-        return jsonInterpreter.parseJson(jsonString, jsonClass);
+        return JsonInterpreter.parseJson(jsonString, jsonClass);
     }
 
     @SuppressWarnings("NestedAssignment")

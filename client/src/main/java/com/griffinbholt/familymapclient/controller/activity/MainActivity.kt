@@ -1,7 +1,10 @@
 package com.griffinbholt.familymapclient.controller.activity
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.griffinbholt.familymapclient.R
 import com.griffinbholt.familymapclient.controller.fragment.LoginFragment
 import com.griffinbholt.familymapclient.controller.fragment.MapFragment
@@ -10,28 +13,42 @@ import com.joanzapata.iconify.Iconify
 import com.joanzapata.iconify.fonts.FontAwesomeModule
 
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_fragment_container)
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		setContentView(R.layout.activity_fragment_container)
+		Iconify.with(FontAwesomeModule())
+	}
 
-        Iconify.with(FontAwesomeModule())
+	override fun onStart() {
+		super.onStart()
 
-        val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+		val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+		if (fragment == null || notLoggedIn()) {
+			loadFragment()
+		}
+	}
 
-        if (fragment == null) {
-            loadInitialFragment()
-        }
-    }
+	private fun loadFragment() {
+		val fragment: Fragment = getAppropriateFragment()
+		supportFragmentManager
+				.beginTransaction()
+				.replace(R.id.fragment_container, fragment)
+				.commit()
+	}
 
-    private fun loadInitialFragment() {
-        val fragment = if (DataCache.authToken == null) {
-            LoginFragment.newInstance()
-        } else {
-            MapFragment.newInstance(null, true)
-        }
+	private fun getAppropriateFragment(): Fragment {
+		return if (notLoggedIn()) {
+			LoginFragment.newInstance()
+		} else {
+			MapFragment.newInstance(null, true)
+		}
+	}
 
-        supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, fragment)
-                .commit()
-    }
+	private fun notLoggedIn(): Boolean {
+		return (DataCache.authToken == null)
+	}
+
+	companion object {
+		fun newIntent(context: Context?): Intent = Intent(context, MainActivity::class.java)
+	}
 }

@@ -40,7 +40,9 @@
         <activity
             android:name=".controller.activity.EventActivity"
             android:parentActivityName=".controller.activity.MainActivity" />
-        <activity android:name=".controller.activity.MainActivity">
+        <activity
+            android:name=".controller.activity.MainActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

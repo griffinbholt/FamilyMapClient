@@ -1,15 +1,15 @@
 package com.griffinbholt.familymapclient.controller.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import androidx.fragment.app.Fragment
 import com.griffinbholt.familymapclient.R
-import com.griffinbholt.familymapclient.model.data.DataCache
 import com.griffinbholt.familymapclient.controller.utils.IconGenerator
 import com.griffinbholt.familymapclient.model.Settings
+import com.griffinbholt.familymapclient.model.data.DataCache
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 /**
@@ -17,97 +17,97 @@ import kotlinx.android.synthetic.main.fragment_settings.*
  * Use the [SettingsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SettingsFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_settings, container, false)
-    }
+class SettingsFragment : UpButtonFragment() {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+		return inflater.inflate(R.layout.fragment_settings, container, false)
+	}
 
-        setLifeStorySwitch()
-        setFamilyTreeSwitch()
-        setSpouseSwitch()
-        setMotherSideSwitch()
-        setFatherSideSwitch()
-        setFemaleEventSwitch()
-        setMaleEventSwitch()
-        setLogoutButton()
-    }
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
 
-    private fun setLifeStorySwitch() {
-        life_story_switch.isChecked = Settings.showLifeStoryLines
+		setLifeStorySwitch()
+		setFamilyTreeSwitch()
+		setSpouseSwitch()
+		setMotherSideSwitch()
+		setFatherSideSwitch()
+		setFemaleEventSwitch()
+		setMaleEventSwitch()
+		setLogoutButton()
+	}
 
-        life_story_switch.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
-            Settings.showLifeStoryLines = b
-        }
-    }
+	private fun setLifeStorySwitch() {
+		life_story_switch.isChecked = Settings.showLifeStoryLines
 
-    private fun setFamilyTreeSwitch() {
-        family_tree_switch.isChecked = Settings.showFamilyTreeLines
+		life_story_switch.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
+			Settings.showLifeStoryLines = b
+		}
+	}
 
-        family_tree_switch.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
-            Settings.showFamilyTreeLines = b
-        }
-    }
+	private fun setFamilyTreeSwitch() {
+		family_tree_switch.isChecked = Settings.showFamilyTreeLines
 
-    private fun setSpouseSwitch() {
-        spouse_switch.isChecked = Settings.showSpouseLines
+		family_tree_switch.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
+			Settings.showFamilyTreeLines = b
+		}
+	}
 
-        spouse_switch.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
-            Settings.showSpouseLines = b
-        }
-    }
+	private fun setSpouseSwitch() {
+		spouse_switch.isChecked = Settings.showSpouseLines
 
-    private fun setFatherSideSwitch() {
-        father_side_switch.isChecked = Settings.fatherSideFilter
+		spouse_switch.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
+			Settings.showSpouseLines = b
+		}
+	}
 
-        father_side_switch.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
-            Settings.fatherSideFilter = b
-        }
-    }
+	private fun setFatherSideSwitch() {
+		father_side_switch.isChecked = Settings.fatherSideFilter
 
-    private fun setMotherSideSwitch() {
-        mother_side_switch.isChecked = Settings.motherSideFilter
+		father_side_switch.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
+			Settings.fatherSideFilter = b
+		}
+	}
 
-        mother_side_switch.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
-            Settings.motherSideFilter = b
-        }
-    }
+	private fun setMotherSideSwitch() {
+		mother_side_switch.isChecked = Settings.motherSideFilter
 
-    private fun setMaleEventSwitch() {
-        male_event_switch.isChecked = Settings.maleEventFilter
+		mother_side_switch.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
+			Settings.motherSideFilter = b
+		}
+	}
 
-        male_event_switch.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
-            Settings.maleEventFilter = b
-        }
-    }
+	private fun setMaleEventSwitch() {
+		male_event_switch.isChecked = Settings.maleEventFilter
 
-    private fun setFemaleEventSwitch() {
-        female_event_switch.isChecked = Settings.femaleEventFilter
+		male_event_switch.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
+			Settings.maleEventFilter = b
+		}
+	}
 
-        female_event_switch.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
-            Settings.femaleEventFilter = b
-        }
-    }
+	private fun setFemaleEventSwitch() {
+		female_event_switch.isChecked = Settings.femaleEventFilter
 
-    private fun setLogoutButton() {
-        logout_button.setOnClickListener {
-            DataCache.clear()
-            IconGenerator.clear()
-            // TODO - Send back to login menu
-        }
-    }
+		female_event_switch.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
+			Settings.femaleEventFilter = b
+		}
+	}
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @return A new instance of fragment SettingsFragment.
-         */
-        @JvmStatic
-        fun newInstance() = SettingsFragment()
-    }
+	private fun setLogoutButton() {
+		logout_button.setOnClickListener {
+			DataCache.clear()
+			IconGenerator.clear()
+			returnToMainActivity()
+		}
+	}
+
+	companion object {
+		/**
+		 * Use this factory method to create a new instance of
+		 * this fragment using the provided parameters.
+		 *
+		 * @return A new instance of fragment SettingsFragment.
+		 */
+		@JvmStatic
+		fun newInstance() = SettingsFragment()
+	}
 }

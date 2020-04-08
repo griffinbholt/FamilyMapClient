@@ -109,21 +109,17 @@ public class ServerPerson extends Person {
     }
 
     /**
-     * Tests if the input <code>Person</code> object is equal to the current instance
-     * @param o Input <code>Object</code> to be tested for equality with the current <code>Person</code> instance
+     * Tests if the input <code>ServerPerson</code> object is equal to the current instance
+     * @param o Input <code>Object</code> to be tested for equality with the current <code>ServerPerson</code> instance
      * @return true, if the two persons have all of the same information; false, if otherwise
      */
-    @SuppressWarnings("OverlyComplexBooleanExpression")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ServerPerson)) return false;
         ServerPerson person = (ServerPerson) o;
-        return getAssociatedUsername().equals(person.getAssociatedUsername()) &&
-                getPersonID().equals(person.getPersonID()) &&
-                getFirstName().equals(person.getFirstName()) &&
-                getLastName().equals(person.getLastName()) &&
-                getGender() == person.getGender() &&
+        return super.equals(o) &&
+                getAssociatedUsername().equals(person.getAssociatedUsername()) &&
                 Objects.equals(getFatherID(), person.getFatherID()) &&
                 Objects.equals(getMotherID(), person.getMotherID()) &&
                 Objects.equals(getSpouseID(), person.getSpouseID());
@@ -135,8 +131,8 @@ public class ServerPerson extends Person {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(getAssociatedUsername(), getPersonID(), getFirstName(), getLastName(),
-                getGender(), getFatherID(), getMotherID(), getSpouseID());
+        return (31 * super.hashCode() + (Objects.hash(getAssociatedUsername(),
+                getFatherID(), getMotherID(), getSpouseID())));
     }
 
     // Getters

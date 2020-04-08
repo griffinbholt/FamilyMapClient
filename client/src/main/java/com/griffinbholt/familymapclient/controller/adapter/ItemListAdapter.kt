@@ -16,184 +16,217 @@ import com.griffinbholt.familymapclient.controller.utils.IconGenerator
 import com.griffinbholt.familymapclient.model.Settings
 import com.griffinbholt.familymapclient.model.data.item.ClientEvent
 import com.griffinbholt.familymapclient.model.data.item.ClientPerson
+import com.griffinbholt.familymapclient.model.data.item.SideOfFamily
 import com.joanzapata.iconify.IconDrawable
 import org.jetbrains.anko.find
 import shared.model.Gender
 
-private const val LIFE_EVENTS_GROUP_POSITION = 0
-private const val FAMILY_GROUP_POSITION = 1
+class ItemListAdapter(
+		private val fragment: Fragment,
+		private val person: ClientPerson
+) : BaseExpandableListAdapter() {
 
-private const val NUM_GROUPS = 2
+	private val context: Context = fragment.context!!
+	private val layoutInflater: LayoutInflater = fragment.layoutInflater
 
-@Suppress("PrivatePropertyName")
-class ItemListAdapter(private val fragment: Fragment,
-                      private val person: ClientPerson):
-                      BaseExpandableListAdapter() {
+	private val lifeEventsTitle: String = getString(R.string.lifeEventsTitle)
+	private val familyTitle: String = getString(R.string.familyTitle)
 
-    private val context: Context = fragment.context!!
-    private val layoutInflater: LayoutInflater = this.
-            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+	private val fatherTitle: String = getString(R.string.fatherTitle)
+	private val motherTitle: String = getString(R.string.motherTitle)
+	private val spouseTitle: String = getString(R.string.spouseTitle)
+	private val childTitle: String = getString(R.string.childTitle)
 
-    private val LIFE_EVENTS_TITLE = getString(R.string.lifeEventsTitle)
-    private val FAMILY_TITLE = getString(R.string.familyTitle)
+	private val lifeEvents: List<ClientEvent> = initializeLifeEvents()
+	private val family: MutableList<FamilyMemberItem> = ArrayList()
 
-    private val FATHER_TITLE = getString(R.string.fatherTitle)
-    private val MOTHER_TITLE = getString(R.string.motherTitle)
-    private val SPOUSE_TITLE = getString(R.string.spouseTitle)
-    private val CHILD_TITLE = getString(R.string.childTitle)
+	init {
+		initializeFamily()
+	}
 
-    private fun getString(resId: Int) : String {
-        return fragment.getString(resId)
-    }
+	private fun getString(resId: Int): String {
+		return fragment.getString(resId)
+	}
 
-    private val lifeEvents: List<ClientEvent> = initializeLifeEvents()
+	private fun initializeLifeEvents(): List<ClientEvent> {
+		return if (genderIsEnabled(person.gender) && sideOfFamilyIsEnabled(person.sideOfFamily)) {
+			person.events.sorted()
+		} else {
+			ArrayList()
+		}
+	}
 
-    private fun initializeLifeEvents(): List<ClientEvent> {
-        return if (genderIsEnabled(person.gender)) {
-            person.events.sorted()
-        } else {
-            ArrayList()
-        }
-    }
+	private fun genderIsEnabled(gender: Gender): Boolean {
+		return ((Settings.femaleEventFilter && gender == Gender.FEMALE) ||
+				(Settings.maleEventFilter && gender == Gender.MALE))
+	}
 
-    private fun genderIsEnabled(gender: Gender) : Boolean {
-        return (((Settings.femaleEventFilter) && (gender == Gender.FEMALE)) ||
-                ((Settings.maleEventFilter) && (gender == Gender.MALE)))
-    }
+	private fun sideOfFamilyIsEnabled(sideOfFamily: SideOfFamily): Boolean {
+		return ((Settings.fatherSideFilter && (sideOfFamily == SideOfFamily.FATHER)) ||
+				(Settings.motherSideFilter && (sideOfFamily == SideOfFamily.MOTHER)) ||
+				(sideOfFamily == SideOfFamily.IMMEDIATE))
+	}
 
-    private val family: MutableList<FamilyMemberItem> = ArrayList()
+	private fun initializeFamily() {
+		person.father?.let { family.add(FamilyMemberItem(it, fatherTitle)) }
+		person.mother?.let { family.add(FamilyMemberItem(it, motherTitle)) }
+		person.spouse?.let { family.add(FamilyMemberItem(it, spouseTitle)) }
 
-    init { initializeFamily() }
+		for (child in person.children) {
+			family.add(FamilyMemberItem(child, childTitle))
+		}
+	}
 
-    private fun initializeFamily() {
-        person.father?.let { family.add(FamilyMemberItem(it, FATHER_TITLE)) }
-        person.mother?.let { family.add(FamilyMemberItem(it, MOTHER_TITLE)) }
-        person.spouse?.let { family.add(FamilyMemberItem(it, SPOUSE_TITLE)) }
+	override fun getGroup(groupPosition: Int): Any {
+		return when (groupPosition) {
+			LIFE_EVENTS_GROUP_POSITION -> lifeEventsTitle
+			FAMILY_GROUP_POSITION -> familyTitle
+			else -> throw IllegalArgumentException(invalidGroupPositionMessage(groupPosition))
+		}
+	}
 
-        for (child in person.children) {
-            family.add(FamilyMemberItem(child, CHILD_TITLE))
-        }
-    }
+	override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
+		return true
+	}
 
-    override fun getGroup(groupPosition: Int): Any {
-        return when (groupPosition) {
-            LIFE_EVENTS_GROUP_POSITION -> LIFE_EVENTS_TITLE
-            FAMILY_GROUP_POSITION -> FAMILY_TITLE
-            else -> throw IllegalArgumentException(invalidGroupPositionMessage(groupPosition))
-        }
-    }
+	override fun hasStableIds(): Boolean {
+		return false
+	}
 
-    override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean { return true }
+	override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup?): View {
+		val groupView: View = inflateGroupView(convertView, parent)
 
-    override fun hasStableIds(): Boolean { return false }
+		setGroupTitle(groupPosition, groupView)
 
-    override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?,
-                              parent: ViewGroup?): View {
-        var groupView: View? = convertView
+		return groupView
+	}
 
-        if (groupView == null) {
-            groupView = layoutInflater.inflate(R.layout.family_item_group, parent, false)
-        }
+	private fun inflateGroupView(groupView: View?, parent: ViewGroup?): View {
+		if (groupView == null) {
+			return layoutInflater.inflate(R.layout.family_item_group, parent, false)
+		}
 
-        setGroupTitle(groupPosition, groupView!!)
+		return groupView
+	}
 
-        return groupView
-    }
+	private fun setGroupTitle(groupPosition: Int, groupView: View) {
+		val groupTitle: TextView = groupView.find(R.id.group_title)
+		groupTitle.text = getGroup(groupPosition) as String
+	}
 
-    private fun setGroupTitle(groupPosition: Int, groupView: View) {
-        val groupTitle: TextView = groupView.find(R.id.group_title)
-        groupTitle.text = getGroup(groupPosition) as String
-    }
+	override fun getChildrenCount(groupPosition: Int): Int {
+		return when (groupPosition) {
+			LIFE_EVENTS_GROUP_POSITION -> lifeEvents.size
+			FAMILY_GROUP_POSITION -> family.size
+			else -> throw IllegalArgumentException(invalidGroupPositionMessage(groupPosition))
+		}
+	}
 
-    override fun getChildrenCount(groupPosition: Int): Int {
-        return when (groupPosition) {
-            LIFE_EVENTS_GROUP_POSITION -> lifeEvents.size
-            FAMILY_GROUP_POSITION -> family.size
-            else -> throw IllegalArgumentException(invalidGroupPositionMessage(groupPosition))
-        }
-    }
+	override fun getChild(groupPosition: Int, childPosition: Int): Any {
+		return when (groupPosition) {
+			LIFE_EVENTS_GROUP_POSITION -> lifeEvents[childPosition]
+			FAMILY_GROUP_POSITION -> family[childPosition]
+			else -> throw IllegalArgumentException(invalidGroupPositionMessage(groupPosition))
+		}
+	}
 
-    override fun getChild(groupPosition: Int, childPosition: Int): Any {
-        return when (groupPosition) {
-            LIFE_EVENTS_GROUP_POSITION -> lifeEvents[childPosition]
-            FAMILY_GROUP_POSITION -> family[childPosition]
-            else -> throw IllegalArgumentException(invalidGroupPositionMessage(groupPosition))
-        }
-    }
+	override fun getGroupId(groupPosition: Int): Long {
+		return groupPosition.toLong()
+	}
 
-    override fun getGroupId(groupPosition: Int): Long { return groupPosition.toLong() }
+	override fun getChildView(
+			groupPosition: Int,
+			childPosition: Int,
+			isLastChild: Boolean,
+			convertView: View?,
+			parent: ViewGroup?
+	): View {
+		val childView: View = inflateChildView(convertView, parent)
 
-    override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean,
-                              convertView: View?, parent: ViewGroup?): View {
-        var childView : View? = convertView
+		updateChildView(childView, groupPosition, childPosition)
 
-        if (childView == null) {
-            childView = layoutInflater.inflate(R.layout.family_item, parent, false)
-        }
+		return childView
+	}
 
-        updateChildView(childView!!, groupPosition, childPosition)
+	private fun inflateChildView(childView: View?, parent: ViewGroup?): View {
+		if (childView == null) {
+			return layoutInflater.inflate(R.layout.family_item, parent, false)
+		}
 
-        return childView
-    }
+		return childView
+	}
 
-    private fun updateChildView(itemView: View, groupPosition: Int, childPosition: Int) {
-        when (groupPosition) {
-            LIFE_EVENTS_GROUP_POSITION -> {
-                val lifeEvent = getChild(groupPosition, childPosition) as ClientEvent
-                initializeLifeEventView(itemView, lifeEvent)
-            }
-            FAMILY_GROUP_POSITION -> {
-                val familyMember = getChild(groupPosition, childPosition) as FamilyMemberItem
-                initializeFamilyMemberView(itemView, familyMember)
-            }
-            else -> throw IllegalArgumentException(invalidGroupPositionMessage(groupPosition))
-        }
-    }
+	private fun updateChildView(itemView: View, groupPosition: Int, childPosition: Int) {
+		when (groupPosition) {
+			LIFE_EVENTS_GROUP_POSITION -> {
+				val lifeEvent = getChild(groupPosition, childPosition) as ClientEvent
+				initializeLifeEventView(itemView, lifeEvent)
+			}
 
-    private fun initializeLifeEventView(itemView: View, lifeEvent: ClientEvent) {
-        val icon: IconDrawable = IconGenerator.getMapMarkerIcon(context, lifeEvent.eventType)
-        initializeItemView(itemView, lifeEvent.description(), lifeEvent.person!!.fullName(), icon)
+			FAMILY_GROUP_POSITION -> {
+				val familyMember = getChild(groupPosition, childPosition) as FamilyMemberItem
+				initializeFamilyMemberView(itemView, familyMember)
+			}
 
-        itemView.setOnClickListener {
-            val intent: Intent = EventActivity.newIntent(context, lifeEvent)
-            startActivity(intent)
-        }
-    }
+			else -> throw IllegalArgumentException(invalidGroupPositionMessage(groupPosition))
+		}
+	}
 
-    private fun initializeFamilyMemberView(itemView: View, familyMember: FamilyMemberItem) {
-        val icon: IconDrawable = IconGenerator.getGenderIcon(context, familyMember.person.gender)
-        initializeItemView(itemView, familyMember.person.fullName(), familyMember.title, icon)
+	private fun initializeLifeEventView(itemView: View, lifeEvent: ClientEvent) {
+		val icon: IconDrawable = IconGenerator.getMapMarkerIcon(context, lifeEvent.eventType)
+		initializeItemView(itemView, lifeEvent.description(), lifeEvent.person!!.fullName(), icon)
 
-        itemView.setOnClickListener {
-            val intent: Intent = PersonActivity.newIntent(context, familyMember.person)
-            startActivity(intent)
-        }
-    }
+		itemView.setOnClickListener {
+			val intent: Intent = EventActivity.newIntent(context, lifeEvent)
+			startActivity(intent)
+		}
+	}
 
-    private fun initializeItemView(itemView: View, firstTextFieldText: String,
-                                   secondTextFieldText: String, icon: IconDrawable) {
-        val firstTextField : TextView = itemView.find(R.id.item_first_text_field)
-        firstTextField.text = firstTextFieldText
+	private fun initializeFamilyMemberView(itemView: View, familyMember: FamilyMemberItem) {
+		val icon: IconDrawable = IconGenerator.getGenderIcon(context, familyMember.person.gender)
+		initializeItemView(itemView, familyMember.person.fullName(), familyMember.title, icon)
 
-        val secondTextField : TextView = itemView.find(R.id.item_second_text_field)
-        secondTextField.text = secondTextFieldText
+		itemView.setOnClickListener {
+			val intent: Intent = PersonActivity.newIntent(context, familyMember.person)
+			startActivity(intent)
+		}
+	}
 
-        val iconField : ImageView = itemView.find(R.id.item_icon)
-        iconField.setImageDrawable(icon)
-    }
+	private fun initializeItemView(
+			itemView: View,
+			firstTextFieldText: String,
+			secondTextFieldText: String,
+			icon: IconDrawable) {
+		val firstTextField: TextView = itemView.find(R.id.item_first_text_field)
+		firstTextField.text = firstTextFieldText
 
-    override fun getChildId(groupPosition: Int, childPosition: Int): Long {
-        return childPosition.toLong()
-    }
+		val secondTextField: TextView = itemView.find(R.id.item_second_text_field)
+		secondTextField.text = secondTextFieldText
 
-    override fun getGroupCount(): Int { return NUM_GROUPS }
+		val iconField: ImageView = itemView.find(R.id.item_icon)
+		iconField.setImageDrawable(icon)
+	}
 
-    private fun invalidGroupPositionMessage(groupPosition: Int) =
-            "Unrecognized group position: $groupPosition"
+	override fun getChildId(groupPosition: Int, childPosition: Int): Long {
+		return childPosition.toLong()
+	}
 
-    private class FamilyMemberItem(val person: ClientPerson, val title: String)
+	override fun getGroupCount(): Int {
+		return NUM_GROUPS
+	}
 
-    private fun startActivity(intent: Intent) {
-        fragment.startActivity(intent)
-    }
+	private fun invalidGroupPositionMessage(groupPosition: Int) = "Unrecognized group position: $groupPosition"
+
+	private fun startActivity(intent: Intent) {
+		fragment.startActivity(intent)
+	}
+
+	private class FamilyMemberItem(val person: ClientPerson, val title: String)
+
+	companion object {
+		private const val LIFE_EVENTS_GROUP_POSITION = 0
+		private const val FAMILY_GROUP_POSITION = 1
+
+		private const val NUM_GROUPS = 2
+	}
 }

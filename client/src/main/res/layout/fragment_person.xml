@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tool="http://schemas.android.com/tools"
-    android:scrollbars="none"
     android:layout_weight="1"
     android:paddingStart="8dp"
     android:paddingEnd="8dp"
+    android:scrollbars="none"
     tool:context=".controller.activity.PersonActivity">
 
     <LinearLayout
@@ -20,39 +20,39 @@
         <LinearLayout style="@style/DescriptiveField">
 
             <TextView
-                style="@style/DescriptiveValue"
                 android:id="@+id/first_name_person_field"
-                tool:text="Jane"/>
+                style="@style/DescriptiveValue"
+                tool:text="Jane" />
 
             <TextView
                 style="@style/DescriptiveFieldLabel"
-                android:text="@string/firstName"/>
+                android:text="@string/firstName" />
 
         </LinearLayout>
 
         <LinearLayout style="@style/DescriptiveField">
 
             <TextView
-                style="@style/DescriptiveValue"
                 android:id="@+id/last_name_person_field"
-                tool:text="Doe"/>
+                style="@style/DescriptiveValue"
+                tool:text="Doe" />
 
             <TextView
                 style="@style/DescriptiveFieldLabel"
-                android:text="@string/lastName"/>
+                android:text="@string/lastName" />
 
         </LinearLayout>
 
         <LinearLayout style="@style/DescriptiveField">
 
             <TextView
-                style="@style/DescriptiveValue"
                 android:id="@+id/gender_person_field"
-                tool:text="Female"/>
+                style="@style/DescriptiveValue"
+                tool:text="Female" />
 
             <TextView
                 style="@style/DescriptiveFieldLabel"
-                android:text="@string/gender"/>
+                android:text="@string/gender" />
 
         </LinearLayout>
 

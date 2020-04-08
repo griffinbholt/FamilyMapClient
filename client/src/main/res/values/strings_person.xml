@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
     <string name="gender">Gender</string>
@@ -11,4 +12,5 @@
     <string name="motherTitle">Mother</string>
     <string name="spouseTitle">Spouse</string>
     <string name="childTitle">Child</string>
+
 </resources>

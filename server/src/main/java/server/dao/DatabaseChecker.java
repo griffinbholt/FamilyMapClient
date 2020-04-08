@@ -1,12 +1,15 @@
 package server.dao;
 
-import server.exception.DataAccessException;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import server.exception.DataAccessException;
 
 /**
  * A singleton class designed to ensure that the database files exist and are correctly set up
@@ -14,7 +17,7 @@ import java.sql.*;
  */
 public final class DatabaseChecker {
     @SuppressWarnings("StaticVariableOfConcreteClass")
-    private static final DatabaseChecker dbCreator = new DatabaseChecker();
+    private static final DatabaseChecker DATABASE_CHECKER = new DatabaseChecker();
 
     private static final String CREATE_USER_TABLE =
             "CREATE TABLE IF NOT EXISTS users\n" +
@@ -72,6 +75,9 @@ public final class DatabaseChecker {
 
     private Connection conn;
 
+    private DatabaseChecker() {
+    }
+
     /**
      * Checks to make sure the database file exists and that the data tables needed for the server
      * are constructed correctly. If the file does not exist, it creates the file.
@@ -80,8 +86,8 @@ public final class DatabaseChecker {
      * @throws IOException An error that occurs when attempting to interact with the database files
      */
     public static void checkDatabase() throws DataAccessException, IOException {
-        dbCreator.checkForDatabaseFiles();
-        dbCreator.createTablesIfNotExist();
+        DATABASE_CHECKER.checkForDatabaseFiles();
+        DATABASE_CHECKER.createTablesIfNotExist();
     }
 
     private void checkForDatabaseFiles() throws IOException {

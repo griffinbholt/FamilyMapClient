@@ -1,13 +1,13 @@
 package server.service.helper;
 
-import shared.model.Gender;
-import shared.model.ServerPerson;
-import shared.model.User;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import shared.model.Gender;
+import shared.model.ServerPerson;
+import shared.model.User;
 
 /**
  * A gadget that manages the logic for generating family members for a user
@@ -59,18 +59,12 @@ final class GenerateAncestorsGadget extends GenerateDataGadget {
 
         // Recursive Case
         ServerPerson mother = generateFemale(username, numGens - 1);
-        String motherID = null;
-        if (null != mother) {
-            motherID = mother.getPersonID();
-            person.setMotherID(motherID);
-        }
+        String motherID = mother.getPersonID();
+        person.setMotherID(motherID);
 
         ServerPerson father = generateMale(username, lastName, numGens - 1);
-        String fatherID = null;
-        if (null != father) {
-            fatherID = father.getPersonID();
-            person.setFatherID(fatherID);
-        }
+        String fatherID = father.getPersonID();
+        person.setFatherID(fatherID);
 
         father.setSpouseID(motherID);
         mother.setSpouseID(fatherID);
