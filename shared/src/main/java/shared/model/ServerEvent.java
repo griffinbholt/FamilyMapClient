@@ -5,7 +5,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A Plain Old Java Object to represent genealogical events utilized by the server
+ * A subclass of {@link Event} that is used by the server to represent an event.
+ *
  * @author griffinbholt
  */
 public class ServerEvent extends Event {

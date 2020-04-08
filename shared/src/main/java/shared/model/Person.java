@@ -3,6 +3,11 @@ package shared.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * An abstract superclass to represent persons
+ *
+ * @author griffinbholt
+ */
 public abstract class Person implements Serializable {
     /**
      * A unique person ID

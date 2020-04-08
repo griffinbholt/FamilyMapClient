@@ -20,6 +20,8 @@ package com.griffinbholt.familymapclient.model
  * [People][com.griffinbholt.familymapclient.model.data.item.ClientPerson] are only filtered in the search results.
  * The filters have no effect on which [people][com.griffinbholt.familymapclient.model.data.item.ClientPerson]
  * are visible on the map or in a person's details.
+ *
+ * @author griffinbholt
  */
 object Settings {
 

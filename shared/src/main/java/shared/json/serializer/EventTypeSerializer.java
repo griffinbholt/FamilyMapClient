@@ -4,12 +4,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import shared.model.EventType;
 
 import java.lang.reflect.Type;
 
+import shared.model.EventType;
+
 /**
  * A {@link JsonSerializer} for interpreting the {@link EventType} class
+ *
  * @author griffinbholt
  */
 public class EventTypeSerializer implements JsonSerializer<EventType> {

@@ -3,12 +3,14 @@ package shared.json.deserializer;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import shared.model.EventType;
 
 import java.lang.reflect.Type;
 
+import shared.model.EventType;
+
 /**
  * A {@link JsonDeserializer} for interpreting the {@link EventType} class
+ *
  * @author griffinbholt
  */
 public class EventTypeDeserializer implements JsonDeserializer<EventType> {

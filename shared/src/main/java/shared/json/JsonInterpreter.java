@@ -20,6 +20,11 @@ import shared.json.serializer.YearSerializer;
 import shared.model.EventType;
 import shared.model.Gender;
 
+/**
+ * A singleton object that serializes and deserializes objects to and from Json strings.
+ *
+ * @author griffinbholt
+ */
 public class JsonInterpreter {
     private final static JsonInterpreter jsonInterpreter = new JsonInterpreter();
 
@@ -40,14 +45,32 @@ public class JsonInterpreter {
     private JsonInterpreter() {
     }
 
+    /**
+     * Generates a Json string for the input {@link Object}
+     *
+     * @param object An Json-serializable {@link Object}
+     * @return A Json string representing the input {@link Object}
+     */
     public static String generateJsonString(Object object) {
         return jsonInterpreter.gsonSerializer.toJson(object);
     }
 
+    /**
+     * Parses a Json string for an object of the input class.
+     * @param jsonString The Json string to parse
+     * @param jsonClass The class that the Json string represents
+     * @return An object of the input class that was represented by the Json string
+     */
     public static Object parseJson(String jsonString, Class<?> jsonClass) {
         return jsonInterpreter.gsonDeserializer.fromJson(jsonString, jsonClass);
     }
 
+    /**
+     * Parses a file that contains a Json string for the input class.
+     * @param filePath The file containing the Json string
+     * @param jsonClass The class that the Json string represents
+     * @return An object of the input class that was represented by the Json string
+     */
     public static Object parseJson(Path filePath, Class<?> jsonClass) {
         File locationFile = filePath.toFile();
 

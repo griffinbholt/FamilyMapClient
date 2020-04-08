@@ -12,6 +12,8 @@ import kotlin.collections.ArrayList
 
 /**
  * A singleton object that stores user data.
+ *
+ * @author griffinbholt
  */
 object DataCache {
 

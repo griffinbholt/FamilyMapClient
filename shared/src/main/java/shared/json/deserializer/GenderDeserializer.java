@@ -3,12 +3,14 @@ package shared.json.deserializer;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import shared.model.Gender;
 
 import java.lang.reflect.Type;
 
+import shared.model.Gender;
+
 /**
  * A {@link JsonDeserializer} for interpreting the {@link Gender} enumeration
+ *
  * @author griffinbholt
  */
 public class GenderDeserializer implements JsonDeserializer<Gender> {

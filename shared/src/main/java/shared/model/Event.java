@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.time.Year;
 import java.util.Objects;
 
+/**
+ * An abstract superclass to represent life events
+ *
+ * @author griffinbholt
+ */
 abstract public class Event implements Serializable {
     /**
      * The latitude at which the event occurred

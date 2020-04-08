@@ -2,6 +2,7 @@
   <dictionary name="griffinbholt">
     <words>
       <w>autofill</w>
+      <w>deserializes</w>
       <w>familymapclient</w>
       <w>familymapserver</w>
       <w>griffinbholt</w>

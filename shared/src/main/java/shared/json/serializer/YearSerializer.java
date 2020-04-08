@@ -1,12 +1,16 @@
 package shared.json.serializer;
 
-import com.google.gson.*;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
 import java.time.Year;
 
 /**
  * A {@link JsonSerializer} for interpreting the {@link Year} class
+ *
  * @author griffinbholt
  */
 public class YearSerializer implements JsonSerializer<Year> {

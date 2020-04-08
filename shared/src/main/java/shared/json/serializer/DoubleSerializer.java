@@ -11,6 +11,7 @@ import java.math.RoundingMode;
 
 /**
  * A {@link JsonSerializer} for double-precision floating point numbers
+ *
  * @author griffinbholt
  */
 public class DoubleSerializer implements JsonSerializer<Double> {

@@ -5,7 +5,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A Plain Old Java Object to represent a person with his/her genealogical data utilized by the server
+ * A subclass of {@link Person} that is used by the server to represent a person.
+ *
  * @author griffinbholt
  */
 public class ServerPerson extends Person {

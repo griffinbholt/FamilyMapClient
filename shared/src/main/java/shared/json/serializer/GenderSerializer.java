@@ -4,12 +4,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import shared.model.Gender;
 
 import java.lang.reflect.Type;
 
+import shared.model.Gender;
+
 /**
  * A {@link JsonSerializer} for interpreting the {@link Gender} enumeration
+ *
  * @author griffinbholt
  */
 public class GenderSerializer implements JsonSerializer<Gender> {
