@@ -12,7 +12,13 @@ import com.griffinbholt.familymapclient.model.data.DataCache
 import com.joanzapata.iconify.Iconify
 import com.joanzapata.iconify.fonts.FontAwesomeModule
 
+/**
+ * A [AppCompatActivity] subclass that hosts either a [LoginFragment] or a [MapFragment]. It serves as the parent
+ * activity for all other activities in the application.
+ * Use the [MainActivity.newIntent] method to create an [Intent] for this activity.
+ */
 class MainActivity : AppCompatActivity() {
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_fragment_container)
@@ -49,6 +55,12 @@ class MainActivity : AppCompatActivity() {
 	}
 
 	companion object {
-		fun newIntent(context: Context?): Intent = Intent(context, MainActivity::class.java)
+		/**
+		 * Generates an [Intent] for the MainActivity to be started
+		 *
+		 * @param packageContext The [Context] of the MainActivity
+		 * @return An [Intent] for the MainActivity
+		 */
+		fun newIntent(packageContext: Context?): Intent = Intent(packageContext, MainActivity::class.java)
 	}
 }

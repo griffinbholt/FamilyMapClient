@@ -428,7 +428,7 @@ class LoginFragment : Fragment() {
 	}
 
 	companion object {
-		// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+		// The fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 		private const val ARG_SERVER_HOST = "com.griffinbholt.login.serverHost"
 		private const val ARG_SERVER_PORT = "com.griffinbholt.login.serverPort"
 		private const val ARG_USER_NAME = "com.griffinbholt.login.userName"

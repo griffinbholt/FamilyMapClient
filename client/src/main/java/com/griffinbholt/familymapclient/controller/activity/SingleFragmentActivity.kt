@@ -5,7 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.griffinbholt.familymapclient.R
 
+/**
+ * An abstract subclass of [AppCompatActivity] that manages the functionality for hosting a single [Fragment].
+ */
 abstract class SingleFragmentActivity : AppCompatActivity() {
+
 	protected abstract fun createFragment(): Fragment
 
 	override fun onCreate(savedInstanceState: Bundle?) {
