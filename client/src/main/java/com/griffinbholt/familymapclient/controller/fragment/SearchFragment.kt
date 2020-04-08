@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.griffinbholt.familymapclient.R
@@ -23,9 +22,8 @@ import kotlinx.android.synthetic.main.fragment_search.*
 import org.jetbrains.anko.find
 
 /**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * An [UpButtonFragment] subclass to display a search menu.
+ * Use the [SearchFragment.newInstance] factory method to create an instance of this fragment.
  */
 class SearchFragment : UpButtonFragment() {
 
@@ -68,6 +66,12 @@ class SearchFragment : UpButtonFragment() {
 		search_recycler_view.layoutManager = LinearLayoutManager(activity)
 	}
 
+	/** A private inner RecyclerView.Adapter class for the RecyclerView
+	 * to display search results (ClientPerson and ClientEvent objects)
+	 *
+	 * @param peopleFound The [List] of [ClientPerson] objects to display in the [RecyclerView]
+	 * @param eventsFound The [List] of [ClientEvent] objects to display in the [RecyclerView]
+	 */
 	private inner class SearchItemAdapter(
 			private val peopleFound: List<ClientPerson>,
 			private val eventsFound: List<ClientEvent>
@@ -95,6 +99,14 @@ class SearchFragment : UpButtonFragment() {
 		}
 	}
 
+	/**
+	 * A private inner [RecyclerView.ViewHolder] subclass for the [SearchFragment]'s [RecyclerView]
+	 * to display search results ([ClientPerson] and [ClientEvent] objects).
+	 * Implements [View.OnClickListener].
+	 *
+	 * @param itemView The [View] for the item in the [RecyclerView] list
+	 * @param viewType The viewType of the bound item
+	 */
 	private inner class SearchItemHolder(
 			itemView: View,
 			private val viewType: Int
@@ -114,11 +126,21 @@ class SearchFragment : UpButtonFragment() {
 			icon = itemView.find(R.id.item_icon)
 		}
 
+		/**
+		 * Binds the input [ClientPerson] object to the [itemView][View] in the [RecyclerView]
+		 *
+		 * @param person A [ClientPerson] item to be bound to the [itemView][View]
+		 */
 		fun bind(person: ClientPerson) {
 			this.person = person
 			bind(person.fullName(), null, IconGenerator.getGenderIcon(context, person.gender))
 		}
 
+		/**
+		 * Binds the input [ClientEvent] object to the [itemView][View] in the [RecyclerView]
+		 *
+		 * @param event A [ClientEvent] item to be bound to the [itemView][View]
+		 */
 		fun bind(event: ClientEvent) {
 			this.event = event
 			val icon: IconDrawable = IconGenerator.getMapMarkerIcon(context, event.eventType)
@@ -143,6 +165,12 @@ class SearchFragment : UpButtonFragment() {
 			icon.setImageDrawable(iconDrawable)
 		}
 
+		/**
+		 * Starts a [PersonActivity] or a [EventActivity], respectively, when a [ClientPerson] or [ClientEvent] item
+		 * is clicked in the [RecyclerView] list.
+		 *
+		 * @param v The item view for the [ClientPerson] or [ClientEvent] item
+		 */
 		override fun onClick(v: View?) {
 			val intent: Intent? = when (viewType) {
 				PERSON_ITEM_VIEW_TYPE -> context?.let { PersonActivity.newIntent(it, this.person) }
@@ -157,6 +185,7 @@ class SearchFragment : UpButtonFragment() {
 	}
 
 	companion object {
+		// The two view types for the RecyclerView used in this fragment
 		private const val PERSON_ITEM_VIEW_TYPE = 0
 		private const val EVENT_ITEM_VIEW_TYPE = 1
 

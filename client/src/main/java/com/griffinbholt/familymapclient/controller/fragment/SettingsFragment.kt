@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import androidx.fragment.app.Fragment
 import com.griffinbholt.familymapclient.R
 import com.griffinbholt.familymapclient.controller.utils.IconGenerator
 import com.griffinbholt.familymapclient.model.Settings
@@ -13,9 +12,8 @@ import com.griffinbholt.familymapclient.model.data.DataCache
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 /**
- * A simple [Fragment] subclass.
- * Use the [SettingsFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * An [UpButtonFragment] subclass to display a the settings menu.
+ * Use the [SearchFragment.newInstance] factory method to create an instance of this fragment.
  */
 class SettingsFragment : UpButtonFragment() {
 

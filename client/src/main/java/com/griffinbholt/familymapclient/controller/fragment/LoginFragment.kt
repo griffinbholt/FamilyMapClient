@@ -22,18 +22,18 @@ import shared.result.FamilyMembersResult
 import shared.result.RegisterResult
 
 /**
- * A simple [Fragment] subclass.
- * Use the [LoginFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * A simple [Fragment] subclass to display the login screen.
+ * Use the [LoginFragment.newInstance] factory method to create an instance of this fragment.
  */
 class LoginFragment : Fragment() {
 
+	// A private enum used to identify the type of task being requested by the user.
 	private enum class TaskType {
 		Login, Register;
 	}
 
-	private var mServerHost: String? = "10.0.2.2"
-	private var mServerPort: Int? = 8080
+	private var mServerHost: String? = DEFAULT_SERVER_HOST
+	private var mServerPort: Int? = DEFAULT_SERVER_PORT
 	private var mUserName: String? = null
 	private var mPassword: String? = null
 	private var mFirstName: String? = null
@@ -428,6 +428,9 @@ class LoginFragment : Fragment() {
 	}
 
 	companion object {
+		private const val DEFAULT_SERVER_HOST = "10.0.2.2" // Represents the host emulator)
+		private const val DEFAULT_SERVER_PORT = 8080  // For quick testing purposes on a computer
+
 		// The fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 		private const val ARG_SERVER_HOST = "com.griffinbholt.login.serverHost"
 		private const val ARG_SERVER_PORT = "com.griffinbholt.login.serverPort"
@@ -441,8 +444,7 @@ class LoginFragment : Fragment() {
 		private const val ARG_REGISTER_ENABLED = "com.griffinbholt.login.registerEnabled"
 
 		/**
-		 * Use this factory method to create a new instance of
-		 * this fragment using the provided parameters.
+		 * Use this factory method to create a new instance of this fragment using the provided parameters.
 		 *
 		 * @return A new instance of fragment LoginFragment.
 		 */

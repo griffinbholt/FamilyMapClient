@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -23,34 +22,34 @@ import com.joanzapata.iconify.IconDrawable
 import kotlinx.android.synthetic.main.fragment_map.*
 
 /**
- * A simple [Fragment] subclass.
- * Use the [MapFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * An [UpButtonFragment] subclass to display a [GoogleMap].
+ * Implements [OnMapReadyCallback], [GoogleMap.OnMapLoadedCallback], and [GoogleMap.OnMarkerClickListener].
+ * Use the [MapFragment.newInstance] factory method to create an instance of this fragment.
  */
 class MapFragment : UpButtonFragment(),
 		OnMapReadyCallback,
 		GoogleMap.OnMapLoadedCallback,
 		GoogleMap.OnMarkerClickListener {
 
-	private var focusEvent: ClientEvent? = null
-	private var displayMenu: Boolean = true
+	private var mFocusEvent: ClientEvent? = null
+	private var mDisplayMenu: Boolean = true
 
-	private var enabledEvents: Set<ClientEvent>? = null
+	private var mEnabledEvents: Set<ClientEvent>? = null
 
-	private val polyLines: MutableList<Polyline> = ArrayList()
+	private val mPolyLines: MutableList<Polyline> = ArrayList()
 
-	private var map: GoogleMap? = null
+	private var mGoogleMap: GoogleMap? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		extractSavedVariables()
-		setHasOptionsMenu(displayMenu)
+		setHasOptionsMenu(mDisplayMenu)
 	}
 
 	private fun extractSavedVariables() {
 		arguments?.let {
-			displayMenu = it.getBoolean(ARG_DISPLAY_MENU)
-			focusEvent = it.getSerializable(ARG_FOCUS_EVENT) as ClientEvent?
+			mDisplayMenu = it.getBoolean(ARG_DISPLAY_MENU)
+			mFocusEvent = it.getSerializable(ARG_FOCUS_EVENT) as ClientEvent?
 		}
 	}
 
@@ -66,7 +65,7 @@ class MapFragment : UpButtonFragment(),
 	}
 
 	private fun updateEnabledEvents() {
-		enabledEvents = HashSet(DataCache.enabledEvents())
+		mEnabledEvents = HashSet(DataCache.enabledEvents())
 	}
 
 	private fun loadChildMapFragment() {
@@ -76,7 +75,7 @@ class MapFragment : UpButtonFragment(),
 
 	override fun onMapReady(googleMap: GoogleMap?) {
 		googleMap!!.setOnMapLoadedCallback(this)
-		this.map = googleMap
+		this.mGoogleMap = googleMap
 		loadInitialMap()
 	}
 
@@ -87,11 +86,11 @@ class MapFragment : UpButtonFragment(),
 	}
 
 	private fun setOnClickListeners() {
-		map!!.setOnMarkerClickListener(this)
+		mGoogleMap!!.setOnMarkerClickListener(this)
 
 		map_info_display.setOnClickListener {
-			focusEvent?.let {
-				startPersonActivity(focusEvent!!.person!!)
+			mFocusEvent?.let {
+				startPersonActivity(mFocusEvent!!.person!!)
 			}
 		}
 	}
@@ -101,9 +100,15 @@ class MapFragment : UpButtonFragment(),
 		startActivity(intent)
 	}
 
+	/**
+	 * Updates the map by making the [Marker]'s related [ClientEvent] the focus of the [map][GoogleMap].
+	 *
+	 * @param selectedMarker The [Marker] that was clicked on the [map][GoogleMap]
+	 * @return [Boolean] always true
+	 */
 	override fun onMarkerClick(selectedMarker: Marker?): Boolean {
 		selectedMarker?.let {
-			focusEvent = it.tag as ClientEvent
+			mFocusEvent = it.tag as ClientEvent
 			updateMap()
 		}
 
@@ -111,8 +116,8 @@ class MapFragment : UpButtonFragment(),
 	}
 
 	private fun drawEnabledEventMarkers() {
-		for (event in enabledEvents!!) {
-			val marker: Marker = map!!.addMarker(generateMarker(event))
+		for (event in mEnabledEvents!!) {
+			val marker: Marker = mGoogleMap!!.addMarker(generateMarker(event))
 			marker.tag = event
 		}
 	}
@@ -129,7 +134,7 @@ class MapFragment : UpButtonFragment(),
 	private fun updateMap() {
 		updateInfoDisplay()
 
-		focusEvent?.let {
+		mFocusEvent?.let {
 			clearPolyLines()
 			centerCameraOnFocusEvent()
 			drawEnabledLines(it)
@@ -142,11 +147,11 @@ class MapFragment : UpButtonFragment(),
 	}
 
 	private fun clearPolyLines() {
-		for (line in polyLines) {
+		for (line in mPolyLines) {
 			line.remove()
 		}
 
-		polyLines.clear()
+		mPolyLines.clear()
 	}
 
 	private fun updateInfoDisplayIcon() {
@@ -155,10 +160,10 @@ class MapFragment : UpButtonFragment(),
 	}
 
 	private fun getInfoDisplayIcon(): IconDrawable {
-		return if (focusEvent == null) {
+		return if (mFocusEvent == null) {
 			IconGenerator.getAndroidIcon(context)
 		} else {
-			IconGenerator.getGenderIcon(context, focusEvent!!.person!!.gender)
+			IconGenerator.getGenderIcon(context, mFocusEvent!!.person!!.gender)
 		}
 	}
 
@@ -167,12 +172,12 @@ class MapFragment : UpButtonFragment(),
 	}
 
 	private fun getInfoDisplayText(): String {
-		return if (focusEvent == null) getString(R.string.defaultDisplayText) else focusEvent!!.description()
+		return if (mFocusEvent == null) getString(R.string.defaultDisplayText) else mFocusEvent!!.description()
 	}
 
 	private fun centerCameraOnFocusEvent() {
-		val coordinates = focusEvent!!.latLng()
-		map?.animateCamera(CameraUpdateFactory.newLatLng(coordinates))
+		val coordinates = mFocusEvent!!.latLng()
+		mGoogleMap?.animateCamera(CameraUpdateFactory.newLatLng(coordinates))
 	}
 
 	private fun drawEnabledLines(selectedEvent: ClientEvent) {
@@ -202,8 +207,8 @@ class MapFragment : UpButtonFragment(),
 	}
 
 	private fun addLineToMap(line: PolylineOptions) {
-		val polyline: Polyline = map!!.addPolyline(line)
-		polyLines.add(polyline)
+		val polyline: Polyline = mGoogleMap!!.addPolyline(line)
+		mPolyLines.add(polyline)
 	}
 
 	private fun spouseExists(person: ClientPerson): Boolean {
@@ -215,7 +220,7 @@ class MapFragment : UpButtonFragment(),
 	}
 
 	private fun eventIsEnabled(event: ClientEvent?): Boolean {
-		return enabledEvents!!.contains(event)
+		return mEnabledEvents!!.contains(event)
 	}
 
 	private fun drawFamilyTreeLines(selectedEvent: ClientEvent) {
@@ -323,29 +328,33 @@ class MapFragment : UpButtonFragment(),
 
 	override fun onSaveInstanceState(outState: Bundle) {
 		super.onSaveInstanceState(outState)
-		saveInstanceVariables(focusEvent, displayMenu, outState)
+		saveInstanceVariables(mFocusEvent, mDisplayMenu, outState)
 	}
 
 	override fun onMapLoaded() {}
 
 	companion object {
+		/* The designated base line width for spouse lines, life story lines, and the first generation
+		   of family tree lines */
 		private const val BASE_LINE_WIDTH = 12.0F
+
+		// The amount by which the line width is decremented with each generation for the family tree lines
 		private const val LINE_WIDTH_DECREMENT = 3.0F
 
+		// The default line colors
 		private const val SPOUSE_LINE_COLOR: Int = Color.RED
 		private const val FAMILY_TREE_COLOR: Int = Color.GREEN
 		private const val LIFE_STORY_COLOR: Int = Color.BLUE
 
-		// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+		// The fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 		private const val ARG_DISPLAY_MENU = "com.griffinbholt.map.displayMenu"
 		private const val ARG_FOCUS_EVENT = "com.griffinbholt.map.focusEvent"
 
 		/**
-		 * Use this factory method to create a new instance of
-		 * this fragment using the provided parameters.
+		 * Use this factory method to create a new instance of this fragment using the provided parameters.
 		 *
 		 * @param focusEvent The event on which the map will center its focus
-		 * @param displayMenu true, of the menu will be displayed; false, otherwise
+		 * @param displayMenu true, the menu will be displayed; false, otherwise
 		 * @return A new instance of fragment MapFragment.
 		 */
 		@JvmStatic

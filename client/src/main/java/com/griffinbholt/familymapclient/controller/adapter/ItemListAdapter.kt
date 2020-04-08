@@ -21,6 +21,10 @@ import com.joanzapata.iconify.IconDrawable
 import org.jetbrains.anko.find
 import shared.model.Gender
 
+/**
+ * The [BaseExpandableListAdapter] subclass for displaying [ClientEvent] and [ClientPerson] objects in an
+ * [android.widget.ExpandableListView] for the [com.griffinbholt.familymapclient.controller.fragment.PersonFragment].
+ */
 class ItemListAdapter(
 		private val fragment: Fragment,
 		private val person: ClientPerson
@@ -221,12 +225,15 @@ class ItemListAdapter(
 		fragment.startActivity(intent)
 	}
 
+	// A private class for passing both a ClientPerson and his/her title (i.e., "Father", "Mother", "Spouse", etc.)
 	private class FamilyMemberItem(val person: ClientPerson, val title: String)
 
 	companion object {
+		// The group positions for the two lists managed by the ExpandableListView
 		private const val LIFE_EVENTS_GROUP_POSITION = 0
 		private const val FAMILY_GROUP_POSITION = 1
 
+		// The number of groups managed by the ExpandableListView
 		private const val NUM_GROUPS = 2
 	}
 }

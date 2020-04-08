@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.griffinbholt.familymapclient.R
 import com.griffinbholt.familymapclient.controller.adapter.ItemListAdapter
 import com.griffinbholt.familymapclient.model.data.item.ClientPerson
@@ -12,9 +11,8 @@ import kotlinx.android.synthetic.main.fragment_person.*
 import shared.model.Gender
 
 /**
- * A simple [Fragment] subclass.
- * Use the [PersonFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * An [UpButtonFragment] subclass to display a [ClientPerson] information.
+ * Use the [PersonFragment.newInstance] factory method to create an instance of this fragment.
  */
 class PersonFragment : UpButtonFragment() {
 
@@ -68,7 +66,7 @@ class PersonFragment : UpButtonFragment() {
 	}
 
 	companion object {
-		// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+		// The fragment initialization parameter for the displayed person
 		private const val ARG_FOCUS_PERSON = "com.griffinbholt.person.focusPerson"
 
 		/**
