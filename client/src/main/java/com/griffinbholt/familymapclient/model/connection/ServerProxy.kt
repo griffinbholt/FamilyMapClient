@@ -21,7 +21,6 @@ import java.net.URL
  * @author griffinbholt
  */
 object ServerProxy {
-
 	private const val POST: String = "POST"
 	private const val GET: String = "GET"
 	private const val AUTHORIZATION: String = "Authorization"

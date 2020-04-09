@@ -314,6 +314,8 @@ object DataCache {
 	}
 
 	private fun clearEvents() {
+		immediateFamilyFemaleEvents.clear()
+		immediateFamilyMaleEvents.clear()
 		motherSideFemaleEvents.clear()
 		motherSideMaleEvents.clear()
 		fatherSideFemaleEvents.clear()
@@ -324,19 +326,24 @@ object DataCache {
 	 * @return A [List] of all of the [ClientPerson] objects enabled by the current settings filters.
 	 */
 	fun enabledPersons(): List<ClientPerson> {
-		val enabledPerson: MutableList<ClientPerson> = ArrayList()
+		val enabledPersons: MutableList<ClientPerson> = ArrayList()
+
+		if (user != null) {
+			enabledPersons.add(user!!)
+			user!!.spouse?.let { enabledPersons.add(it) }
+		}
 
 		if (Settings.motherSideFilter) {
-			enabledPerson.addAll(motherSideFemales)
-			enabledPerson.addAll(motherSideMales)
+			enabledPersons.addAll(motherSideFemales)
+			enabledPersons.addAll(motherSideMales)
 		}
 
 		if (Settings.fatherSideFilter) {
-			enabledPerson.addAll(fatherSideFemales)
-			enabledPerson.addAll(fatherSideMales)
+			enabledPersons.addAll(fatherSideFemales)
+			enabledPersons.addAll(fatherSideMales)
 		}
 
-		return enabledPerson
+		return enabledPersons
 	}
 
 	/**

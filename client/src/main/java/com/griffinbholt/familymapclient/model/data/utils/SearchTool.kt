@@ -39,16 +39,9 @@ object SearchTool {
 	fun searchEnabledPeople(): List<ClientPerson> {
 		foundPeople.clear()
 
-		checkImmediateFamily()
-
 		checkPersons(DataCache.enabledPersons())
 
 		return foundPeople.sorted()
-	}
-
-	private fun checkImmediateFamily() {
-		checkPerson(DataCache.user!!)
-		DataCache.user!!.spouse?.let { checkPerson(it) }
 	}
 
 	private fun checkPersons(persons: List<ClientPerson>) {
